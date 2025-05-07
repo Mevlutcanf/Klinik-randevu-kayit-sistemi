@@ -1,0 +1,26 @@
+@model IEnumerable<randevu_kayit.Models.Doctor>
+
+<h2>Doktorlar</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Adı</th>
+            <th>Uzmanlık Alanı</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+            <tr>
+                <td>@doctor.Name</td>
+                <td>@doctor.Specialty</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Doctor", new { id = doctor.Id })">Düzenle</a>
+                    |
+                    <a href="@Url.Action("Delete", "Doctor", new { id = doctor.Id })">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
