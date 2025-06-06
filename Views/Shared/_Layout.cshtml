@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Sincan Özel Tıp Merkezi</title>
+    <title>@ViewData["Title"] - Fındık Özel Klinik</title>
     <meta name="description" content="Ankara Sincan'da kaliteli sağlık hizmeti. Uzman doktorlar, modern tıbbi cihazlar ve online randevu sistemi ile 7/24 hizmetinizdeyiz.">
     <meta name="keywords" content="hastane, doktor, randevu, sağlık, tıp merkezi, sincan, ankara">
-    <meta name="author" content="Sincan Özel Tıp Merkezi">
+    <meta name="author" content="Fındık Özel Klinik">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="@ViewData["Title"] - Sincan Özel Tıp Merkezi">
+    <meta property="og:title" content="@ViewData["Title"] - Fındık Özel Klinik">
     <meta property="og:description" content="Ankara Sincan'da kaliteli sağlık hizmeti">
     <meta property="og:type" content="website">
     <meta property="og:url" content="@(Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path)">
@@ -34,7 +34,7 @@
     
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
     <!-- Loading Spinner -->
     <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
 
@@ -49,8 +49,8 @@
                         <i class="bi bi-hospital text-primary" style="font-size: 2rem;"></i>
                     </div>
                     <div class="brand-text">
-                        <span class="fw-bold text-primary">Sincan</span>
-                        <span class="text-secondary">Özel Tıp Merkezi</span>
+                        <span class="fw-bold text-primary">Fındık</span>
+                        <span class="text-secondary">Özel Klinik</span>
                     </div>
                 </a>
                 
@@ -112,21 +112,23 @@
         </nav>
     </header>
 
-    <main role="main" class="flex-grow-1 pb-3" style="margin-top: 80px;">
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        }
+    <main role="main" class="flex-grow-1" style="margin-top: 80px;">
+        <div class="container-fluid px-3 py-3">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
         @RenderBody()
     </main>
 
@@ -139,8 +141,8 @@
                         <div class="d-flex align-items-center mb-3">
                             <i class="bi bi-hospital text-primary me-2" style="font-size: 2rem;"></i>
                             <div>
-                                <h5 class="text-white mb-0">Sincan</h5>
-                                <small class="text-light">Özel Tıp Merkezi</small>
+                                <h5 class="text-white mb-0">Fındık</h5>
+                                <small class="text-light">Özel Klinik</small>
                             </div>
                         </div>
                         <p class="text-light mb-3">
@@ -226,8 +228,8 @@
                 </div>
                 
                 <div class="col-lg-3 col-md-6 mb-4">
-                    <h6 class="text-white mb-3">Çalışma Saatleri & Acil Durum</h6>
-                    <div class="working-hours mb-4">
+                    <h6 class="text-white mb-3">Çalışma Saatleri</h6>
+                    <div class="working-hours">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-light">Pazartesi - Cuma:</span>
                             <span class="text-white">09:00 - 18:00</span>
@@ -236,25 +238,9 @@
                             <span class="text-light">Cumartesi:</span>
                             <span class="text-white">09:00 - 13:00</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex justify-content-between">
                             <span class="text-light">Pazar:</span>
                             <span class="text-danger">Kapalı</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Emergency Contact - Fixed Position -->
-                    <div class="emergency-contact-fixed">
-                        <div class="emergency-contact p-3 bg-danger rounded text-center">
-                            <i class="bi bi-exclamation-triangle-fill mb-2 text-white" style="font-size: 1.5rem;"></i>
-                            <h6 class="text-white mb-1">ACİL DURUM</h6>
-                            <div class="d-flex justify-content-center gap-3">
-                                <a href="tel:112" class="btn btn-light btn-sm fw-bold">
-                                    <i class="bi bi-telephone-fill me-1"></i>112
-                                </a>
-                                <a href="tel:+905367151292" class="btn btn-outline-light btn-sm">
-                                    <i class="bi bi-hospital me-1"></i>Hastane
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -265,7 +251,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <p class="mb-0 text-light">
-                            <i class="bi bi-c-circle me-1"></i>@DateTime.Now.Year Sincan Özel Tıp Merkezi. Tüm hakları saklıdır.
+                            <i class="bi bi-c-circle me-1"></i>@DateTime.Now.Year Fındık Özel Klinik. Tüm hakları saklıdır.
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end">

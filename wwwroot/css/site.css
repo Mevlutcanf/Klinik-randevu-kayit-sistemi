@@ -31,7 +31,6 @@ html {
 }
 
 body {
-  margin-bottom: 250px; /* Footer height */
   font-family: 'Roboto', sans-serif;
   color: #12263f;
   background-color: #f9fbfd;
@@ -46,20 +45,23 @@ body {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/* Footer */
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #f8f9fa;
-    border-top: 1px solid rgba(0,0,0,.1);
-    padding: 20px 0;
-    height: 250px; /* Footer height */
+/* Sticky Footer with Flexbox */
+html, body {
+  height: 100%;
 }
 
-/* Main content padding to prevent footer overlap */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
 main {
-    padding-bottom: 250px !important;
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex-shrink: 0;
+  background-color: #343a40 !important;
 }
 
 /* Cards */
