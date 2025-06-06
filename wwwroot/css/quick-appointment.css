@@ -1,0 +1,343 @@
+/* Quick Appointment Styles */
+
+/* Hero Section */
+.quick-appointment-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.hero-pattern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>') repeat;
+}
+
+.quick-features {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+}
+
+.feature-item i {
+    font-size: 1.25rem;
+    color: #ffd700;
+}
+
+/* Floating Elements */
+.hero-illustration {
+    position: relative;
+    height: 300px;
+}
+
+.floating-elements {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.floating-element {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    animation: float 3s ease-in-out infinite;
+}
+
+.element-1 {
+    top: 20%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.element-2 {
+    top: 50%;
+    right: 20%;
+    animation-delay: 1s;
+}
+
+.element-3 {
+    bottom: 20%;
+    left: 50%;
+    animation-delay: 2s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Progress Steps */
+.appointment-progress-bar {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 0 2rem;
+}
+
+.appointment-progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, #e9ecef 0%, #e9ecef 100%);
+    z-index: 0;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    background: white;
+    padding: 0 1rem;
+}
+
+.step-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #e9ecef;
+    border: 3px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.progress-step.active .step-circle {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step.completed .step-circle {
+    background: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.progress-step span {
+    font-size: 0.875rem;
+    color: #6c757d;
+    text-align: center;
+    font-weight: 500;
+}
+
+.progress-step.active span {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.progress-step.completed span {
+    color: #198754;
+    font-weight: 600;
+}
+
+/* Form Card */
+.appointment-form-card {
+    background: white;
+    border-radius: 20px;
+    border: none;
+    overflow: hidden;
+}
+
+.card-header-gradient {
+    background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-section:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.1);
+}
+
+.section-title {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 0.5rem;
+}
+
+/* Form Controls */
+.form-floating > .form-control:focus,
+.form-floating > .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.form-floating > label {
+    color: #6c757d;
+}
+
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: #198754;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='m2.3 6.73.65-.53 1.4-1.74c.37-.46.89-.46 1.26 0l1.4 1.74.65.53c.2.16.5.03.5-.22v-5.22c0-.28-.22-.5-.5-.5h-4.5c-.28 0-.5.22-.5.5v5.22c0 .25.3.38.5.22z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+
+/* Form Actions */
+.form-actions {
+    padding: 2rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    margin: 0 -2rem -2rem -2rem;
+}
+
+/* Info Cards */
+.info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.info-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    margin: 0 auto 1rem;
+}
+
+.info-card h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDelay {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-delay {
+    animation: fadeInDelay 0.8s ease-out 0.3s both;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .appointment-progress-bar {
+        margin: 0 1rem;
+    }
+    
+    .progress-step {
+        padding: 0 0.5rem;
+    }
+    
+    .step-circle {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
+    
+    .progress-step span {
+        font-size: 0.75rem;
+    }
+    
+    .quick-features {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .card-header-gradient {
+        padding: 1.5rem;
+    }
+    
+    .form-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-actions {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .appointment-progress-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .appointment-progress-bar::before {
+        display: none;
+    }
+}

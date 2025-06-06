@@ -1,0 +1,520 @@
+@{
+    ViewData["Title"] = "Yedekleme ve Geri Yükleme";
+}
+
+<link href="~/css/admin-modern.css" rel="stylesheet" />
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-header-content">
+            <div class="admin-header-left">
+                <div class="admin-header-icon bg-gradient-blue">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <h1 class="admin-header-title">Yedekleme ve Geri Yükleme</h1>
+                    <p class="admin-header-subtitle">Sistem verilerini yedekleyin ve geri yükleyin</p>
+                </div>
+            </div>
+            <div class="admin-header-actions">
+                <a href="@Url.Action("Index", "Admin")" class="modern-btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Admin Paneli</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <div class="admin-card-header">
+            <h2 class="admin-card-title">
+                <i class="bi bi-database text-primary"></i>
+                Sistem Yedekleme Merkezi
+            </h2>
+        </div>        
+        <div class="stats-grid">
+            <!-- Yedekleme Bölümü -->
+            <div class="stats-card bg-gradient-blue">
+                <div class="stats-card-icon">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                </div>
+                <div class="stats-card-content">
+                    <h3 class="stats-card-title">Sistem Yedekleme</h3>
+                    <p class="stats-card-description">Veritabanı ve sistem dosyalarının güvenli yedeklenmesi</p>
+                    
+                    <div class="modern-form-group">
+                        <label class="modern-form-label">Yedekleme Türü</label>
+                        <select class="modern-form-control" id="backupType">
+                            <option value="full">Tam Yedekleme</option>
+                            <option value="database">Sadece Veritabanı</option>
+                            <option value="files">Sadece Dosyalar</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modern-form-group">
+                        <label class="modern-form-label">Yedekleme Açıklaması</label>
+                        <input type="text" class="modern-form-control" id="backupDescription" 
+                               placeholder="Yedekleme açıklaması (opsiyonel)">
+                    </div>
+                    
+                    <div class="stats-card-action">
+                        <button type="button" class="modern-btn btn-white" onclick="createBackup()">
+                            <i class="bi bi-download"></i>
+                            <span>Yedekleme Oluştur</span>
+                        </button>
+                    </div>
+                    
+                    <div id="backupProgress" class="modern-progress-container" style="display: none;">
+                        <div class="modern-progress-bar">
+                            <div class="modern-progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="modern-progress-text">Yedekleme işlemi devam ediyor...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Geri Yükleme Bölümü -->
+            <div class="stats-card bg-gradient-orange">
+                <div class="stats-card-icon">
+                    <i class="bi bi-cloud-arrow-down"></i>
+                </div>
+                <div class="stats-card-content">
+                    <h3 class="stats-card-title">Sistem Geri Yükleme</h3>
+                    <p class="stats-card-description">Önceki yedekten sistemi güvenli geri yükleme</p>
+                    
+                    <div class="modern-form-group">
+                        <label class="modern-form-label">Yedek Dosyası</label>
+                        <input type="file" class="modern-form-control" id="restoreFile" accept=".bak,.zip">
+                    </div>
+                    
+                    <div class="modern-checkbox-group">
+                        <label class="modern-checkbox">
+                            <input type="checkbox" id="confirmRestore">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-text">Geri yükleme işleminin mevcut verileri sileceğini anlıyorum</span>
+                        </label>
+                    </div>
+                    
+                    <div class="stats-card-action">
+                        <button type="button" class="modern-btn btn-white" onclick="restoreBackup()" disabled id="restoreBtn">
+                            <i class="bi bi-upload"></i>
+                            <span>Geri Yükle</span>
+                        </button>
+                    </div>
+                    
+                    <div id="restoreProgress" class="modern-progress-container" style="display: none;">
+                        <div class="modern-progress-bar">
+                            <div class="modern-progress-fill bg-danger" style="width: 0%"></div>
+                        </div>
+                        <p class="modern-progress-text">Geri yükleme işlemi devam ediyor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <!-- Yedek Geçmişi -->
+        <div class="admin-section">
+            <div class="admin-section-header">
+                <h3 class="admin-section-title">
+                    <i class="bi bi-clock-history text-info"></i>
+                    Yedek Geçmişi
+                </h3>
+            </div>
+            
+            <div class="modern-table-wrapper">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="bi bi-calendar3 text-info"></i>
+                                Tarih
+                            </th>
+                            <th>
+                                <i class="bi bi-tags text-primary"></i>
+                                Tür
+                            </th>
+                            <th>
+                                <i class="bi bi-hdd text-secondary"></i>
+                                Boyut
+                            </th>
+                            <th>
+                                <i class="bi bi-file-text text-dark"></i>
+                                Açıklama
+                            </th>
+                            <th>
+                                <i class="bi bi-check-circle text-success"></i>
+                                Durum
+                            </th>
+                            <th>
+                                <i class="bi bi-gear text-warning"></i>
+                                İşlemler
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fade-in">
+                            <td>
+                                <div class="table-cell-content">
+                                    <span class="table-date">2024-01-15 14:30</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="modern-badge badge-primary">Tam Yedekleme</span>
+                            </td>
+                            <td>
+                                <span class="table-size">245 MB</span>
+                            </td>
+                            <td>Haftalık otomatik yedekleme</td>
+                            <td>
+                                <span class="modern-badge badge-success">Başarılı</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="modern-btn-icon btn-primary" title="İndir">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                    <button class="modern-btn-icon btn-warning" title="Geri Yükle">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                    <button class="modern-btn-icon btn-danger" title="Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="fade-in">
+                            <td>
+                                <div class="table-cell-content">
+                                    <span class="table-date">2024-01-14 10:15</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="modern-badge badge-info">Veritabanı</span>
+                            </td>
+                            <td>
+                                <span class="table-size">128 MB</span>
+                            </td>
+                            <td>Güncelleme öncesi yedekleme</td>
+                            <td>
+                                <span class="modern-badge badge-success">Başarılı</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="modern-btn-icon btn-primary" title="İndir">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                    <button class="modern-btn-icon btn-warning" title="Geri Yükle">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                    <button class="modern-btn-icon btn-danger" title="Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="fade-in">
+                            <td>
+                                <div class="table-cell-content">
+                                    <span class="table-date">2024-01-13 09:00</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="modern-badge badge-secondary">Dosyalar</span>
+                            </td>
+                            <td>
+                                <span class="table-size">89 MB</span>
+                            </td>
+                            <td>Manuel yedekleme</td>
+                            <td>
+                                <span class="modern-badge badge-warning">Kısmi</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="modern-btn-icon btn-primary" title="İndir">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                    <button class="modern-btn-icon btn-warning" title="Geri Yükle" disabled>
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                    <button class="modern-btn-icon btn-danger" title="Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+        <!-- Otomatik Yedekleme Ayarları -->
+        <div class="admin-section">
+            <div class="admin-section-header">
+                <h3 class="admin-section-title">
+                    <i class="bi bi-gear-fill text-primary"></i>
+                    Otomatik Yedekleme Ayarları
+                </h3>
+            </div>
+            
+            <div class="modern-form-container">
+                <div class="modern-form-row">
+                    <div class="modern-form-col">
+                        <div class="modern-toggle-group">
+                            <label class="modern-toggle">
+                                <input type="checkbox" id="autoBackupEnabled" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Otomatik yedeklemeyi etkinleştir</span>
+                            </label>
+                        </div>
+                        
+                        <div class="modern-form-group">
+                            <label class="modern-form-label">
+                                <i class="bi bi-clock text-primary"></i>
+                                Yedekleme Sıklığı
+                            </label>
+                            <select class="modern-form-control" id="backupFrequency">
+                                <option value="daily">Günlük</option>
+                                <option value="weekly" selected>Haftalık</option>
+                                <option value="monthly">Aylık</option>
+                            </select>
+                        </div>
+                        
+                        <div class="modern-form-group">
+                            <label class="modern-form-label">
+                                <i class="bi bi-alarm text-warning"></i>
+                                Yedekleme Saati
+                            </label>
+                            <input type="time" class="modern-form-control" id="backupTime" value="02:00">
+                        </div>
+                    </div>
+                    
+                    <div class="modern-form-col">
+                        <div class="modern-form-group">
+                            <label class="modern-form-label">
+                                <i class="bi bi-archive text-info"></i>
+                                Maksimum Yedek Sayısı
+                            </label>
+                            <input type="number" class="modern-form-control" id="maxBackups" value="10" min="1" max="50">
+                            <div class="form-helper-text">Eski yedekler otomatik olarak silinir</div>
+                        </div>
+                        
+                        <div class="modern-form-group">
+                            <label class="modern-form-label">
+                                <i class="bi bi-folder text-secondary"></i>
+                                Yedekleme Konumu
+                            </label>
+                            <input type="text" class="modern-form-control" id="backupLocation" 
+                                   value="/var/backups/randevu_system" readonly>
+                        </div>
+                        
+                        <div class="modern-form-actions">
+                            <button type="button" class="modern-btn btn-primary" onclick="saveBackupSettings()">
+                                <i class="bi bi-check-lg"></i>
+                                <span>Ayarları Kaydet</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Confirmation Modal -->
+<div class="modern-modal" id="confirmModal" style="display: none;">
+    <div class="modern-modal-backdrop" onclick="closeModal('confirmModal')"></div>
+    <div class="modern-modal-content">
+        <div class="modern-modal-header bg-gradient-orange">
+            <h3 class="modern-modal-title">
+                <i class="bi bi-exclamation-triangle"></i>
+                Dikkat!
+            </h3>
+            <button type="button" class="modern-modal-close" onclick="closeModal('confirmModal')">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        <div class="modern-modal-body">
+            <div class="confirmation-content">
+                <div class="confirmation-icon">
+                    <i class="bi bi-shield-exclamation text-warning"></i>
+                </div>
+                <p class="confirmation-text">Bu işlem geri alınamaz. Devam etmek istediğinizden emin misiniz?</p>
+            </div>
+        </div>
+        <div class="modern-modal-footer">
+            <button type="button" class="modern-btn btn-secondary" onclick="closeModal('confirmModal')">
+                <i class="bi bi-x-circle"></i>
+                <span>İptal</span>
+            </button>
+            <button type="button" class="modern-btn btn-warning" id="confirmButton">
+                <i class="bi bi-check-circle"></i>
+                <span>Devam Et</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DOM Ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize fade-in animations
+        const elements = document.querySelectorAll('.fade-in');
+        elements.forEach((el, index) => {
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+        
+        // Initialize form handlers
+        initializeFormHandlers();
+    });
+
+    // Form handlers
+    function initializeFormHandlers() {
+        // Geri yükleme onay checkbox'ını kontrol et
+        document.getElementById('confirmRestore').addEventListener('change', function() {
+            const restoreBtn = document.getElementById('restoreBtn');
+            if (this.checked) {
+                restoreBtn.disabled = false;
+                restoreBtn.classList.remove('btn-disabled');
+            } else {
+                restoreBtn.disabled = true;
+                restoreBtn.classList.add('btn-disabled');
+            }
+        });
+    }
+
+    // Modal functions
+    function showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    // Yedekleme oluşturma
+    function createBackup() {
+        const backupType = document.getElementById('backupType').value;
+        const description = document.getElementById('backupDescription').value;
+        
+        // Progress container'ı göster
+        const progressContainer = document.getElementById('backupProgress');
+        progressContainer.style.display = 'block';
+        
+        // Progress bar animasyonu
+        let progress = 0;
+        const progressFill = progressContainer.querySelector('.modern-progress-fill');
+        
+        const interval = setInterval(() => {
+            progress += Math.random() * 20;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    progressFill.style.width = '0%';
+                    
+                    // Başarı mesajı
+                    showSuccessNotification('Yedekleme Tamamlandı!', 'Sistem yedeği başarıyla oluşturuldu.');
+                    
+                    // Sayfayı yenile (gerçek uygulamada yeni yedek listede görünür)
+                    setTimeout(() => location.reload(), 2000);
+                }, 1000);
+            }
+            
+            progressFill.style.width = progress + '%';
+        }, 500);
+        
+        // Backend'e istek gönder (gerçek uygulamada)
+        // fetch('/Admin/CreateBackup', { ... })
+    }
+
+    // Geri yükleme işlemi
+    function restoreBackup() {
+        document.getElementById('confirmButton').onclick = function() {
+            closeModal('confirmModal');
+            
+            // Progress container'ı göster
+            const progressContainer = document.getElementById('restoreProgress');
+            progressContainer.style.display = 'block';
+            
+            // Progress bar animasyonu
+            let progress = 0;
+            const progressFill = progressContainer.querySelector('.modern-progress-fill');
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        
+                        // Başarı mesajı
+                        showSuccessNotification('Geri Yükleme Tamamlandı!', 'Sistem başarıyla geri yüklendi.');
+                    }, 1000);
+                }
+                
+                progressFill.style.width = progress + '%';
+            }, 800);
+        };
+        
+        showModal('confirmModal');
+    }
+
+    // Yedekleme ayarlarını kaydet
+    function saveBackupSettings() {
+        const settings = {
+            autoBackupEnabled: document.getElementById('autoBackupEnabled').checked,
+            backupFrequency: document.getElementById('backupFrequency').value,
+            backupTime: document.getElementById('backupTime').value,
+            maxBackups: document.getElementById('maxBackups').value
+        };
+        
+        // Backend'e kaydet (gerçek uygulamada)
+        // fetch('/Admin/SaveBackupSettings', { ... })
+        
+        showSuccessNotification('Ayarlar Kaydedildi!', 'Otomatik yedekleme ayarları güncellendi.');
+    }
+
+    // Success notification
+    function showSuccessNotification(title, message) {
+        const notification = document.createElement('div');
+        notification.className = 'modern-notification success';
+        notification.innerHTML = `
+            <div class="notification-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="notification-content">
+                <h4>${title}</h4>
+                <p>${message}</p>
+            </div>
+            <button class="notification-close" onclick="this.parentElement.remove()">
+                <i class="bi bi-x"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+</script>
+
+

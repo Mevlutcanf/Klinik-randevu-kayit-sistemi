@@ -1,11 +1,25 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace randevu_kayit.Models
 {
     public class Department
     {
         public int Id { get; set; }  // Bölüm kimliği
-        public string? Name { get; set; }  // Bölüm adı
+
+        [Required]
+        [StringLength(100)]
+        [Display(Name = "Bölüm Adı")]
+        public string Name { get; set; } = string.Empty;
+
+        [StringLength(500)]
+        [Display(Name = "Açıklama")]
+        public string? Description { get; set; }
+
+        [StringLength(500)]
+        [Display(Name = "Görsel URL")]
+        public string? ImageUrl { get; set; }
 
         // İlişkiler
-        public ICollection<Doctor> Doctors { get; set; } = new List<Doctor>(); // Bölümde çalışan doktorlar
+        public virtual ICollection<ApplicationUser> Doctors { get; set; } = new List<ApplicationUser>();
     }
 }

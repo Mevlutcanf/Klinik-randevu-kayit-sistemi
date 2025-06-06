@@ -1,0 +1,526 @@
+@model IEnumerable<randevu_kayit.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Doktor Yönetimi";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="modern-table fade-in">
+            <div class="admin-card-header">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div>
+                        <h6 class="mb-1">@ViewData["Title"]</h6>
+                        <small class="opacity-75">Sistemdeki doktorları yönetin ve takip edin</small>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <button class="modern-btn outline" onclick="toggleView()">
+                            <i class="bi bi-grid-3x3-gap me-2"></i>
+                            <span id="viewToggleText">Tablo Görünümü</span>
+                        </button>
+                        <button class="modern-btn outline" data-bs-toggle="modal" data-bs-target="#filterModal">
+                            <i class="bi bi-funnel me-2"></i>Filtrele
+                        </button>
+                        <a asp-action="AddDoctor" class="modern-btn primary">
+                            <i class="bi bi-plus-circle me-2"></i>Yeni Doktor Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modern Search and Filter Section -->
+            <div class="search-filter-section">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="search-input-group">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="modern-form-control" id="searchInput" 
+                                   placeholder="Doktor adı, email veya uzmanlık alanı ara...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="modern-form-control" id="departmentFilter">
+                            <option value="">Tüm Bölümler</option>
+                            <option value="dahiliye">Dahiliye</option>
+                            <option value="cerrahi">Cerrahi</option>
+                            <option value="cocuk">Çocuk Doktoru</option>
+                            <option value="kardiyoloji">Kardiyoloji</option>
+                            <option value="noroloji">Nöroloji</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex gap-2">
+                            <button class="modern-btn outline" onclick="selectAll()">
+                                <i class="bi bi-check-all me-1"></i>Tümünü Seç
+                            </button>
+                            <button class="modern-btn danger" onclick="bulkDelete()" id="bulkDeleteBtn" disabled>
+                                <i class="bi bi-trash me-1"></i>Toplu Sil
+                            </button>
+                        </div>
+                    </div>
+                </div>                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show modern-alert" role="alert">
+                        <i class="bi bi-check-circle me-2"></i>
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show modern-alert" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                    <!-- Kart Görünümü -->
+                    <div id="cardView" class="row">
+                        @foreach (var doctor in Model)
+                        {
+                            <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-name="@doctor.AdSoyad.ToLower()" data-email="@doctor.Email.ToLower()" data-specialty="@doctor.Uzmanlik?.ToLower()" data-department="@(doctor.Department?.Name?.ToLower())">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input doctor-checkbox" type="checkbox" value="@doctor.Id" onchange="updateBulkActions()">
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="@Url.Action("EditDoctor", new { id = doctor.Id })">
+                                                        <i class="bi bi-pencil me-2"></i>Düzenle</a></li>
+                                                    <li><a class="dropdown-item" href="#" onclick="viewDoctorDetails('@doctor.Id')">
+                                                        <i class="bi bi-eye me-2"></i>Detayları Gör</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteDoctor('@doctor.Id', '@doctor.AdSoyad')">
+                                                        <i class="bi bi-trash me-2"></i>Sil</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-center mb-3">
+                                            @if (!string.IsNullOrEmpty(doctor.ProfilePhotoPath))
+                                            {
+                                                <img src="@doctor.ProfilePhotoPath" alt="@doctor.AdSoyad" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                                                    <i class="bi bi-person text-white" style="font-size: 2rem;"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        
+                                        <h6 class="card-title text-center mb-3">@doctor.AdSoyad</h6>
+                                        
+                                        <div class="doctor-info">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-envelope text-primary me-2"></i>
+                                                <span class="text-sm">@doctor.Email</span>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-telephone text-success me-2"></i>
+                                                <span class="text-sm">@doctor.PhoneNumber</span>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-briefcase text-info me-2"></i>
+                                                <span class="text-sm">@doctor.Uzmanlik</span>
+                                            </div>
+                                            @if (doctor.Department != null)
+                                            {
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="bi bi-hospital text-warning me-2"></i>
+                                                    <span class="text-sm">@doctor.Department.Name</span>
+                                                </div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="mt-3 pt-3 border-top">
+                                            <div class="d-flex justify-content-between text-sm text-muted">
+                                                <span><i class="bi bi-calendar-check me-1"></i>23 Randevu</span>
+                                                <span><i class="bi bi-star-fill text-warning me-1"></i>4.8</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Tablo Görünümü -->
+                    <div id="tableView" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="selectAllTable" onchange="selectAllTable()">
+                                            </div>
+                                        </th>
+                                        <th>Doktor</th>
+                                        <th>İletişim</th>
+                                        <th>Uzmanlık</th>
+                                        <th>Bölüm</th>
+                                        <th>Durum</th>
+                                        <th>İstatistikler</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var doctor in Model)
+                                    {
+                                        <tr class="doctor-row" data-name="@doctor.AdSoyad.ToLower()" data-email="@doctor.Email.ToLower()" data-specialty="@doctor.Uzmanlik?.ToLower()" data-department="@(doctor.Department?.Name?.ToLower())">
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input doctor-checkbox-table" type="checkbox" value="@doctor.Id" onchange="updateBulkActions()">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(doctor.ProfilePhotoPath))
+                                                    {
+                                                        <img src="@doctor.ProfilePhotoPath" alt="@doctor.AdSoyad" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                            <i class="bi bi-person text-white"></i>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <h6 class="mb-0">@doctor.AdSoyad</h6>
+                                                        <small class="text-muted">Dr. @doctor.AdSoyad</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <div class="text-sm">@doctor.Email</div>
+                                                    <div class="text-sm text-muted">@doctor.PhoneNumber</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">@doctor.Uzmanlik</span>
+                                            </td>
+                                            <td>
+                                                @if (doctor.Department != null)
+                                                {
+                                                    <span class="badge bg-secondary">@doctor.Department.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">Aktif</span>
+                                            </td>
+                                            <td>
+                                                <div class="text-sm">
+                                                    <div>23 Randevu</div>
+                                                    <div class="text-warning">★ 4.8</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="@Url.Action("EditDoctor", new { id = doctor.Id })" class="btn btn-sm btn-outline-primary" title="Düzenle">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <button class="btn btn-sm btn-outline-info" onclick="viewDoctorDetails('@doctor.Id')" title="Detaylar">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteDoctor('@doctor.Id', '@doctor.AdSoyad')" title="Sil">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtre Modal'ı -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Gelişmiş Filtreler</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Uzmanlık Alanı</label>
+                    <select class="form-select" id="specialtyFilter">
+                        <option value="">Tüm Uzmanlıklar</option>
+                        <option value="dahiliye">Dahiliye</option>
+                        <option value="kardiyoloji">Kardiyoloji</option>
+                        <option value="noroloji">Nöroloji</option>
+                        <option value="cerrahi">Cerrahi</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Durum</label>
+                    <select class="form-select" id="statusFilter">
+                        <option value="">Tüm Durumlar</option>
+                        <option value="active">Aktif</option>
+                        <option value="inactive">Pasif</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kayıt Tarihi</label>
+                    <input type="date" class="form-control" id="dateFilter">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" onclick="applyFilters()">Filtrele</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doktor Detay Modal'ı -->
+<div class="modal fade" id="doctorDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Doktor Detayları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="doctorDetailContent">
+                <!-- Dinamik içerik buraya yüklenecek -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentView = 'card'; // 'card' veya 'table'
+
+        $(document).ready(function() {
+            // Arama işlevi
+            $('#searchInput').on('keyup', function() {
+                filterDoctors();
+            });
+
+            // Bölüm filtresi
+            $('#departmentFilter').on('change', function() {
+                filterDoctors();
+            });
+        });
+
+        // Görünüm değiştirme
+        function toggleView() {
+            if (currentView === 'card') {
+                $('#cardView').hide();
+                $('#tableView').show();
+                $('#viewToggleText').text('Kart Görünümü');
+                currentView = 'table';
+            } else {
+                $('#tableView').hide();
+                $('#cardView').show();
+                $('#viewToggleText').text('Tablo Görünümü');
+                currentView = 'card';
+            }
+        }
+
+        // Doktor filtreleme
+        function filterDoctors() {
+            const searchTerm = $('#searchInput').val().toLowerCase();
+            const departmentFilter = $('#departmentFilter').val().toLowerCase();
+
+            if (currentView === 'card') {
+                $('.doctor-card').each(function() {
+                    const name = $(this).data('name') || '';
+                    const email = $(this).data('email') || '';
+                    const specialty = $(this).data('specialty') || '';
+                    const department = $(this).data('department') || '';
+                    
+                    const matchesSearch = name.includes(searchTerm) || 
+                                        email.includes(searchTerm) || 
+                                        specialty.includes(searchTerm);
+                    const matchesDepartment = !departmentFilter || department.includes(departmentFilter);
+                    
+                    if (matchesSearch && matchesDepartment) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            } else {
+                $('.doctor-row').each(function() {
+                    const name = $(this).data('name') || '';
+                    const email = $(this).data('email') || '';
+                    const specialty = $(this).data('specialty') || '';
+                    const department = $(this).data('department') || '';
+                    
+                    const matchesSearch = name.includes(searchTerm) || 
+                                        email.includes(searchTerm) || 
+                                        specialty.includes(searchTerm);
+                    const matchesDepartment = !departmentFilter || department.includes(departmentFilter);
+                    
+                    if (matchesSearch && matchesDepartment) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        }
+
+        // Tümünü seç
+        function selectAll() {
+            const checkboxes = currentView === 'card' ? '.doctor-checkbox' : '.doctor-checkbox-table';
+            $(checkboxes).prop('checked', true);
+            updateBulkActions();
+        }
+
+        // Tablo için tümünü seç
+        function selectAllTable() {
+            const isChecked = $('#selectAllTable').prop('checked');
+            $('.doctor-checkbox-table').prop('checked', isChecked);
+            updateBulkActions();
+        }
+
+        // Toplu işlem butonlarını güncelle
+        function updateBulkActions() {
+            const selectedCount = $('.doctor-checkbox:checked, .doctor-checkbox-table:checked').length;
+            $('#bulkDeleteBtn').prop('disabled', selectedCount === 0);
+        }
+
+        // Toplu silme
+        function bulkDelete() {
+            const selectedIds = [];
+            $('.doctor-checkbox:checked, .doctor-checkbox-table:checked').each(function() {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length === 0) return;
+
+            if (confirm(`${selectedIds.length} doktoru silmek istediğinizden emin misiniz?`)) {
+                // AJAX isteği gönder
+                $.ajax({
+                    url: '@Url.Action("BulkDeleteDoctors", "Admin")',
+                    type: 'POST',
+                    data: { doctorIds: selectedIds },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Silme işlemi başarısız: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Bir hata oluştu.');
+                    }
+                });
+            }
+        }
+
+        // Doktor silme
+        function deleteDoctor(doctorId, doctorName) {
+            if (confirm(`${doctorName} adlı doktoru silmek istediğinizden emin misiniz?`)) {
+                $.ajax({
+                    url: '@Url.Action("DeleteDoctor", "Admin")',
+                    type: 'POST',
+                    data: { id: doctorId },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Silme işlemi başarısız: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Bir hata oluştu.');
+                    }
+                });
+            }
+        }
+
+        // Doktor detaylarını görüntüle
+        function viewDoctorDetails(doctorId) {
+            $.ajax({
+                url: '@Url.Action("GetDoctorDetails", "Admin")',
+                type: 'GET',
+                data: { id: doctorId },
+                success: function(response) {
+                    $('#doctorDetailContent').html(response);
+                    $('#doctorDetailModal').modal('show');
+                },
+                error: function() {
+                    alert('Doktor detayları yüklenemedi.');
+                }
+            });
+        }
+
+        // Gelişmiş filtreleri uygula
+        function applyFilters() {
+            // Bu fonksiyon gelişmiş filtre modalındaki seçimleri uygular
+            $('#filterModal').modal('hide');
+            filterDoctors();
+        }
+    </script>
+}
+
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .bg-gradient-primary {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+    }
+    
+    .doctor-info .text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .table th {
+        border-top: none;
+        font-weight: 600;
+        color: #67748e;
+        background-color: #f8f9fa;
+    }
+    
+    .btn-group .btn {
+        border-radius: 0.375rem;
+        margin-right: 2px;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+    }
+    
+    .form-check-input:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    
+    .text-sm {
+        font-size: 0.875rem;
+    }
+</style>

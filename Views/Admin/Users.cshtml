@@ -1,0 +1,362 @@
+@model IEnumerable<randevu_kayit.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="modern-table fade-in">
+            <div class="admin-card-header">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div>
+                        <h6 class="mb-1">
+                            <i class="bi bi-people text-primary me-2"></i>
+                            @ViewData["Title"]
+                        </h6>
+                        <small class="opacity-75">Sistem kullanıcılarını yönetin ve takip edin</small>
+                    </div>
+                    <div>
+                        <button class="modern-btn outline" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                            <i class="bi bi-person-plus me-2"></i>Yeni Kullanıcı
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modern Search and Filter Section -->
+            <div class="search-filter-section">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="modern-form-label">Rol Filtresi</label>
+                        <select name="role" class="modern-form-control">
+                            <option value="">Tüm Roller</option>
+                            @foreach (var role in ViewBag.Roles)
+                            {
+                                <option value="@role" selected="@(role == ViewBag.SelectedRole)">@role</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="modern-form-label">Arama</label>
+                        <div class="search-input-group">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="search" class="modern-form-control" 
+                                   placeholder="Ad, email veya telefon ara..." value="@ViewBag.Search">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="modern-btn primary">
+                                <i class="bi bi-funnel me-2"></i>Filtrele
+                            </button>
+                            <a href="@Url.Action("Users")" class="modern-btn outline">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Temizle
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modern-table-wrapper">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th width="250">Kullanıcı</th>
+                            <th>İletişim</th>
+                            <th width="150">Bölüm</th>
+                            <th width="100">Durum</th>
+                            <th width="120">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3">
+                                            @if (!string.IsNullOrEmpty(user.ProfilePhotoPath))
+                                            {
+                                                <img src="@user.ProfilePhotoPath" alt="@user.AdSoyad" class="rounded-circle">
+                                            }
+                                            else
+                                            {
+                                                <div class="avatar-placeholder">
+                                                    <i class="bi bi-person"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-dark">@user.AdSoyad</h6>
+                                            <small class="text-muted">@user.UserName</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <div class="text-sm mb-1">
+                                            <i class="bi bi-envelope text-primary me-1"></i>
+                                            @user.Email
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        {
+                                            <div class="text-sm text-muted">
+                                                <i class="bi bi-telephone text-success me-1"></i>
+                                                @user.PhoneNumber
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (user.Department != null)
+                                    {
+                                        <span class="modern-badge secondary">
+                                            <i class="bi bi-building me-1"></i>
+                                            @user.Department.Name
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        var isLocked = user.LockoutEnd != null && user.LockoutEnd > DateTimeOffset.Now;
+                                    }
+                                    <span class="modern-badge @(isLocked ? "danger" : "success")">
+                                        <i class="bi bi-@(isLocked ? "lock" : "unlock") me-1"></i>
+                                        @(isLocked ? "Pasif" : "Aktif")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <form asp-action="ToggleUserStatus" method="post" style="display: inline;">
+                                            <input type="hidden" name="userId" value="@user.Id" />
+                                            @if (isLocked)
+                                            {
+                                                <button type="submit" class="modern-btn-icon success" title="Aktifleştir">
+                                                    <i class="bi bi-unlock"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="modern-btn-icon danger" title="Pasifleştir"
+                                                        onclick="return confirm('Bu kullanıcıyı pasifleştirmek istediğinizden emin misiniz?')">
+                                                    <i class="bi bi-lock"></i>
+                                                </button>
+                                            }
+                                        </form>
+                                        <button type="button" class="modern-btn-icon info" title="Düzenle"
+                                                data-bs-toggle="modal" data-bs-target="#editUserModal"
+                                                data-user-id="@user.Id"
+                                                data-user-name="@user.AdSoyad"
+                                                data-user-email="@user.Email"
+                                                data-user-phone="@user.PhoneNumber"
+                                                data-user-department="@user.DepartmentId">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <a href="@Url.Action("ViewUser", new { id = user.Id })" class="modern-btn-icon primary" title="Detayları Gör">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modern-modal">
+            <form asp-action="AddUser" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-person-plus text-primary me-2"></i>
+                        Yeni Kullanıcı Ekle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="modern-form-label">Ad Soyad</label>
+                        <input type="text" name="adSoyad" class="modern-form-control" placeholder="Kullanıcının adı ve soyadı" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">E-posta</label>
+                        <input type="email" name="email" class="modern-form-control" placeholder="E-posta adresi" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Telefon</label>
+                        <input type="tel" name="phoneNumber" class="modern-form-control" placeholder="Telefon numarası">
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Şifre</label>
+                        <input type="password" name="password" class="modern-form-control" placeholder="Geçici şifre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Bölüm</label>
+                        <select name="departmentId" class="modern-form-control">
+                            <option value="">Bölüm Seçiniz</option>
+                            @foreach (var dept in ViewBag.Departments ?? new string[] {})
+                            {
+                                <option value="@dept.Id">@dept.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modern-btn outline" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="modern-btn primary">
+                        <i class="bi bi-save me-2"></i>Kullanıcı Ekle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modern-modal">
+            <form asp-action="UpdateUser" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square text-info me-2"></i>
+                        Kullanıcı Düzenle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="userId">
+                    <div class="mb-3">
+                        <label class="modern-form-label">Ad Soyad</label>
+                        <input type="text" name="adSoyad" id="userName" class="modern-form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">E-posta</label>
+                        <input type="email" name="email" id="userEmail" class="modern-form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Telefon</label>
+                        <input type="tel" name="phoneNumber" id="userPhone" class="modern-form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Bölüm</label>
+                        <select name="departmentId" id="userDepartment" class="modern-form-control">
+                            <option value="">Bölüm Seçiniz</option>
+                            @foreach (var dept in ViewBag.Departments ?? new string[] {})
+                            {
+                                <option value="@dept.Id">@dept.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modern-btn outline" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="modern-btn primary">
+                        <i class="bi bi-save me-2"></i>Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Edit User Modal functionality
+            $('#editUserModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                
+                modal.find('#userId').val(button.data('user-id'));
+                modal.find('#userName').val(button.data('user-name'));
+                modal.find('#userEmail').val(button.data('user-email'));
+                modal.find('#userPhone').val(button.data('user-phone'));
+                modal.find('#userDepartment').val(button.data('user-department'));
+            });
+
+            // Form animations
+            $('.modern-table').addClass('fade-in');
+            
+            // Enhanced search functionality
+            $('.search-input-group input').on('keyup', function(e) {
+                if (e.keyCode === 13) { // Enter key
+                    $(this).closest('form').submit();
+                }
+            });
+            
+            // Status toggle confirmation
+            $('form[asp-action="ToggleUserStatus"] button').on('click', function(e) {
+                const isActivating = $(this).hasClass('modern-btn-icon success');
+                if (!isActivating) {
+                    return confirm('Bu kullanıcıyı pasifleştirmek istediğinizden emin misiniz?');
+                }
+                return true;
+            });
+        });
+    </script>
+}
+
+<style>
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        position: relative;
+    }
+    
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .avatar-placeholder {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+    
+    .text-sm {
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+    
+    .modern-badge {
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .search-input-group {
+        position: relative;
+    }
+    
+    .search-input-group i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--admin-text-muted);
+        z-index: 3;
+    }
+    
+    .search-input-group input {
+        padding-left: 40px;
+    }
+</style>

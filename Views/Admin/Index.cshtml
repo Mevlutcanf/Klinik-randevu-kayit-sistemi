@@ -1,0 +1,272 @@
+@model randevu_kayit.ViewModels.DashboardStats
+@{
+    ViewData["Title"] = "Admin Paneli";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="stats-card fade-in">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon primary">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <div class="stats-number">@Model.TotalDoctors</div>
+                                <div class="stats-label">Toplam Doktor</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="stats-card fade-in">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon success">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <div class="stats-number">@Model.TotalPatients</div>
+                                <div class="stats-label">Toplam Hasta</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="stats-card fade-in">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon warning">
+                                <i class="bi bi-calendar2-check"></i>
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <div class="stats-number">@Model.ActiveAppointments</div>
+                                <div class="stats-label">Aktif Randevu</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+                <div class="stats-card fade-in">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon info">
+                                <i class="bi bi-calendar-date"></i>
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <div class="stats-number">@Model.TodaysAppointments</div>
+                                <div class="stats-label">Bugünkü Randevu</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-lg-4">
+                <div class="quick-actions fade-in">
+                    <div class="admin-card-header">
+                        <h6>Hızlı İşlemler</h6>
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <div class="p-3">
+                        <a asp-action="Doctors" class="quick-action-btn">
+                            <i class="bi bi-person-badge"></i>Doktor Yönetimi
+                        </a>
+                        <a asp-action="AddDoctor" class="quick-action-btn">
+                            <i class="bi bi-person-plus"></i>Yeni Doktor Ekle
+                        </a>
+                        <a asp-action="Users" class="quick-action-btn">
+                            <i class="bi bi-people"></i>Kullanıcı Yönetimi
+                        </a>
+                        <a asp-action="UserManagement" class="quick-action-btn">
+                            <i class="bi bi-person-gear"></i>Gelişmiş Kullanıcı Yön.
+                        </a>
+                        <a asp-action="Departments" class="quick-action-btn">
+                            <i class="bi bi-diagram-2"></i>Bölüm Yönetimi
+                        </a>
+                        <a asp-action="Appointments" class="quick-action-btn">
+                            <i class="bi bi-calendar2-week"></i>Randevu Yönetimi
+                        </a>
+                        <a asp-action="Reports" class="quick-action-btn">
+                            <i class="bi bi-graph-up"></i>Raporlar & İstatistik
+                        </a>
+                        <hr class="my-3" style="border-color: var(--admin-border);">
+                        <a asp-controller="QuickAppointment" asp-action="Index" class="quick-action-btn">
+                            <i class="bi bi-lightning"></i>Hızlı Randevular
+                        </a>
+                        <a asp-action="SystemSettings" class="quick-action-btn">
+                            <i class="bi bi-gear"></i>Sistem Ayarları
+                        </a>
+                        <a asp-action="SystemLogs" class="quick-action-btn">
+                            <i class="bi bi-file-text"></i>Sistem Logları
+                        </a>
+                        <a asp-action="BackupRestore" class="quick-action-btn">
+                            <i class="bi bi-shield-check"></i>Yedekleme & Geri Yük.
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="admin-card fade-in">
+                            <div class="admin-card-header">
+                                <h6>Son Aktiviteler</h6>
+                                <i class="bi bi-activity"></i>
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="modern-timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">5 dakika önce</div>
+                                            <div class="timeline-title">Yeni hasta kaydı</div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">15 dakika önce</div>
+                                            <div class="timeline-title">Randevu oluşturuldu</div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">1 saat önce</div>
+                                            <div class="timeline-title">Yeni doktor eklendi</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container fade-in">
+                            <div class="admin-card-header">
+                                <h6>Sistem İstatistikleri</h6>
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <div class="card-body p-3">
+                                <canvas id="chart-bars" class="chart-canvas" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="admin-card fade-in">
+                            <div class="admin-card-header">
+                                <h6>Günlük Özet</h6>
+                                <i class="bi bi-calendar-today"></i>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <div class="stats-number text-primary">@Model.TodaysAppointments</div>
+                                        <div class="stats-label">Bugünkü Randevular</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stats-number text-success">@Model.ActiveAppointments</div>
+                                        <div class="stats-label">Aktif Randevular</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stats-number text-warning">@Model.TotalDoctors</div>
+                                        <div class="stats-label">Toplam Doktor</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stats-number text-info">@Model.TotalPatients</div>
+                                        <div class="stats-label">Toplam Hasta</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Modern Chart.js configuration with gradient colors
+        var ctx = document.getElementById("chart-bars").getContext("2d");
+        
+        // Create gradients
+        var gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient1.addColorStop(0, '#6366f1');
+        gradient1.addColorStop(1, '#4f46e5');
+        
+        var gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient2.addColorStop(0, '#10b981');
+        gradient2.addColorStop(1, '#059669');
+        
+        var gradient3 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient3.addColorStop(0, '#f59e0b');
+        gradient3.addColorStop(1, '#d97706');
+        
+        var gradient4 = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient4.addColorStop(0, '#3b82f6');
+        gradient4.addColorStop(1, '#2563eb');
+        
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Doktorlar", "Hastalar", "Aktif Randevular", "Bugünkü Randevular"],
+                datasets: [{
+                    label: "Sayı",
+                    backgroundColor: [gradient1, gradient2, gradient3, gradient4],
+                    data: [@Model.TotalDoctors, @Model.TotalPatients, @Model.ActiveAppointments, @Model.TodaysAppointments],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    maxBarThickness: 60
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { weight: '600' } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.1)' },
+                        ticks: { font: { weight: '500' } }
+                    }
+                },
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+        
+        // Add fade-in animation to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+} 

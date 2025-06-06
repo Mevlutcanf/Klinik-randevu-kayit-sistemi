@@ -1,0 +1,157 @@
+@model randevu_kayit.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "Profil Düzenle";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @if (TempData["StatusMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["StatusMessage"]
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Ad" class="form-label"></label>
+                                    <input asp-for="Ad" class="form-control" />
+                                    <span asp-validation-for="Ad" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Soyad" class="form-label"></label>
+                                    <input asp-for="Soyad" class="form-control" />
+                                    <span asp-validation-for="Soyad" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="TCKimlikNo" class="form-label"></label>
+                                    <input asp-for="TCKimlikNo" class="form-control" />
+                                    <span asp-validation-for="TCKimlikNo" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="DogumTarihi" class="form-label"></label>
+                                    <input asp-for="DogumTarihi" class="form-control" type="date" />
+                                    <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Email" class="form-label"></label>
+                                    <input asp-for="Email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PhoneNumber" class="form-label"></label>
+                                    <input asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (User.IsInRole("Patient"))
+                        {
+                            <div class="form-group mb-3">
+                                <label asp-for="KanGrubu" class="form-label"></label>
+                                <select asp-for="KanGrubu" class="form-select">
+                                    <option value="">Seçiniz...</option>
+                                    <option value="A Rh+">A Rh+</option>
+                                    <option value="A Rh-">A Rh-</option>
+                                    <option value="B Rh+">B Rh+</option>
+                                    <option value="B Rh-">B Rh-</option>
+                                    <option value="AB Rh+">AB Rh+</option>
+                                    <option value="AB Rh-">AB Rh-</option>
+                                    <option value="0 Rh+">0 Rh+</option>
+                                    <option value="0 Rh-">0 Rh-</option>
+                                </select>
+                                <span asp-validation-for="KanGrubu" class="text-danger"></span>
+                            </div>
+                        }
+
+                        @if (User.IsInRole("Doctor"))
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label asp-for="Uzmanlik" class="form-label"></label>
+                                        <input asp-for="Uzmanlik" class="form-control" />
+                                        <span asp-validation-for="Uzmanlik" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label asp-for="DepartmentId" class="form-label"></label>
+                                        <select asp-for="DepartmentId" class="form-select"
+                                                asp-items="@(new SelectList(ViewBag.Departments, "Id", "Name"))">
+                                            <option value="">Seçiniz...</option>
+                                        </select>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <hr />
+                        <h4>Şifre Değiştir</h4>
+                        <p class="text-muted">Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakın.</p>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="CurrentPassword" class="form-label"></label>
+                                    <input asp-for="CurrentPassword" class="form-control" />
+                                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="NewPassword" class="form-label"></label>
+                                    <input asp-for="NewPassword" class="form-control" />
+                                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ConfirmNewPassword" class="form-label"></label>
+                                    <input asp-for="ConfirmNewPassword" class="form-control" />
+                                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group d-grid">
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

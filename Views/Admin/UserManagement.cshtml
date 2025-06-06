@@ -1,0 +1,422 @@
+@model IEnumerable<randevu_kayit.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Gelişmiş Kullanıcı Yönetimi";
+}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-header-content">
+            <div class="admin-header-title">
+                <i class="bi bi-people-fill"></i>
+                <h1>Kullanıcı Yönetimi</h1>
+                <span class="admin-header-subtitle">Kullanıcıları yönetin ve roller atayın</span>
+            </div>
+            <div class="admin-header-actions">
+                <div class="modern-dropdown">
+                    <button type="button" class="modern-btn modern-btn-primary" data-bs-toggle="dropdown">
+                        <i class="bi bi-tools me-2"></i>Toplu İşlemler
+                        <i class="bi bi-chevron-down ms-1"></i>
+                    </button>
+                    <ul class="modern-dropdown-menu">
+                        <li><a class="modern-dropdown-item" href="#" onclick="bulkAssignRole()">
+                            <i class="bi bi-person-badge me-2"></i>Rol Ata</a></li>
+                        <li><a class="modern-dropdown-item" href="#" onclick="bulkDelete()">
+                            <i class="bi bi-trash me-2"></i>Kullanıcıları Sil</a></li>
+                        <li><a class="modern-dropdown-item" href="#" onclick="exportUsers()">
+                            <i class="bi bi-download me-2"></i>Dışa Aktar</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Modern Filter Section -->
+    <div class="detail-card">
+        <div class="detail-card-header">
+            <h5><i class="bi bi-funnel me-2"></i>Filtreler</h5>
+        </div>
+        <div class="detail-card-body">
+            <form method="get" class="modern-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Rol Filtresi</label>
+                        <select name="role" class="modern-select">
+                            <option value="all">Tüm Roller</option>
+                            @if (ViewBag.Roles != null)
+                            {
+                                @foreach (var role in ViewBag.Roles)
+                                {
+                                    <option value="@role" selected="@(ViewBag.SelectedRole == role)">@role</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum Filtresi</label>
+                        <select name="status" class="modern-select">
+                            <option value="all">Tüm Durumlar</option>
+                            <option value="active" selected="@(ViewBag.SelectedStatus == "active")">Aktif</option>
+                            <option value="inactive" selected="@(ViewBag.SelectedStatus == "inactive")">Pasif</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-span-2">
+                        <label class="form-label">Kullanıcı Ara</label>
+                        <div class="modern-input-group">
+                            <input type="text" name="search" class="modern-input" placeholder="İsim, e-posta veya telefon ile arama yapın..." />
+                            <button type="submit" class="modern-btn modern-btn-primary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>    <!-- Modern User Table -->
+    <div class="detail-card">
+        <div class="detail-card-header">
+            <h5>Kullanıcılar (@Model.Count())</h5>
+            <div class="modern-toggle">
+                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                <label for="selectAll">Tümünü Seç</label>
+            </div>
+        </div>
+        <div class="detail-card-body p-0">
+            <div class="modern-table-wrapper">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th width="60" class="text-center"></th>
+                            <th>Kullanıcı</th>
+                            <th>İletişim</th>
+                            <th>Roller</th>
+                            <th>Son Giriş</th>
+                            <th>Durum</th>
+                            <th width="150" class="text-center">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr class="user-row">
+                                <td class="text-center">
+                                    <input type="checkbox" class="modern-checkbox user-checkbox" value="@user.Id">
+                                </td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            @if (!string.IsNullOrEmpty(user.ProfilePhotoPath))
+                                            {
+                                                <img src="@user.ProfilePhotoPath" alt="@user.AdSoyad" class="user-avatar-img">
+                                            }
+                                            else
+                                            {
+                                                <div class="user-avatar-placeholder">
+                                                    <i class="bi bi-person"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="user-details">
+                                            <div class="user-name">@user.AdSoyad</div>
+                                            <div class="user-username">@user.UserName</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-info">
+                                        <div class="contact-email">
+                                            <i class="bi bi-envelope me-1"></i>@user.Email
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        {
+                                            <div class="contact-phone">
+                                                <i class="bi bi-telephone me-1"></i>@user.PhoneNumber
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (user.IsDoctor == true)
+                                    {
+                                        <span class="modern-badge modern-badge-primary">
+                                            <i class="bi bi-person-fill-gear me-1"></i>Doktor
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="modern-badge modern-badge-success">
+                                            <i class="bi bi-person-fill me-1"></i>Hasta
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="last-login">
+                                        <small class="text-muted">@DateTime.Now.AddDays(-1).ToString("dd.MM.yyyy")</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="modern-badge modern-badge-success">
+                                        <i class="bi bi-check-circle me-1"></i>Aktif
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="action-buttons">
+                                        <button type="button" class="modern-btn modern-btn-sm modern-btn-outline-primary" 
+                                                onclick="editUser('@user.Id')" title="Düzenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button type="button" class="modern-btn modern-btn-sm modern-btn-outline-info" 
+                                                onclick="viewUser('@user.Id')" title="Görüntüle">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button type="button" class="modern-btn modern-btn-sm modern-btn-outline-danger" 
+                                                onclick="deleteUser('@user.Id')" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Role Assignment Modal -->
+<div class="modern-modal fade" id="roleModal" tabindex="-1">
+    <div class="modern-modal-dialog">
+        <div class="modern-modal-content">
+            <div class="modern-modal-header">
+                <h5 class="modern-modal-title">
+                    <i class="bi bi-person-badge me-2"></i>Rol Atama
+                </h5>
+                <button type="button" class="modern-modal-close" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <div class="modern-modal-body">
+                <div class="form-group">
+                    <label class="form-label">Atanacak Rol</label>
+                    <select id="roleSelect" class="modern-select">
+                        <option value="">Rol seçin...</option>
+                        <option value="Admin">
+                            <i class="bi bi-shield-check"></i> Admin
+                        </option>
+                        <option value="Doctor">
+                            <i class="bi bi-person-fill-gear"></i> Doktor
+                        </option>
+                        <option value="Patient">
+                            <i class="bi bi-person-fill"></i> Hasta
+                        </option>
+                    </select>
+                </div>
+                <div class="selected-users-info">
+                    <small class="text-muted">Seçili kullanıcı sayısı: <span id="selectedCount">0</span></small>
+                </div>
+            </div>
+            <div class="modern-modal-footer">
+                <button type="button" class="modern-btn modern-btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>İptal
+                </button>
+                <button type="button" class="modern-btn modern-btn-primary" onclick="assignRole()">
+                    <i class="bi bi-check-circle me-2"></i>Rol Ata
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Modern notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `modern-notification modern-notification-${type}`;
+            notification.innerHTML = `
+                <div class="modern-notification-content">
+                    <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="modern-notification-close" onclick="this.parentElement.remove()">
+                    <i class="bi bi-x"></i>
+                </button>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        function updateSelectedCount() {
+            const count = document.querySelectorAll('.user-checkbox:checked').length;
+            const countElement = document.getElementById('selectedCount');
+            if (countElement) {
+                countElement.textContent = count;
+            }
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.user-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            updateSelectedCount();
+        }
+
+        function getSelectedUsers() {
+            const checkboxes = document.querySelectorAll('.user-checkbox:checked');
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        function bulkAssignRole() {
+            const selected = getSelectedUsers();
+            if (selected.length === 0) {
+                showNotification('Lütfen en az bir kullanıcı seçin.', 'warning');
+                return;
+            }
+            updateSelectedCount();
+            $('#roleModal').modal('show');
+        }
+
+        function assignRole() {
+            const selectedUsers = getSelectedUsers();
+            const roleName = document.getElementById('roleSelect').value;
+            
+            if (!roleName) {
+                showNotification('Lütfen bir rol seçin.', 'warning');
+                return;
+            }
+            
+            // Add loading animation
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="bi bi-arrow-repeat spin me-2"></i>İşlem yapılıyor...';
+            button.disabled = true;
+            
+            fetch('@Url.Action("BulkAssignRole")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: JSON.stringify({
+                    userIds: selectedUsers,
+                    roleName: roleName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(`${selectedUsers.length} kullanıcıya ${roleName} rolü başarıyla atandı.`);
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification(data.message || 'Rol atama işlemi başarısız oldu.', 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+            })
+            .finally(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                $('#roleModal').modal('hide');
+            });
+        }        function bulkDelete() {
+            const selected = getSelectedUsers();
+            if (selected.length === 0) {
+                showNotification('Lütfen en az bir kullanıcı seçin.', 'warning');
+                return;
+            }
+            
+            if (confirm(`${selected.length} kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`)) {
+                // Process each user deletion
+                let deletedCount = 0;
+                const promises = selected.map(userId => 
+                    fetch('@Url.Action("DeleteUser")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                        },
+                        body: JSON.stringify({ userId: userId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) deletedCount++;
+                        return data;
+                    })
+                );
+
+                Promise.all(promises).then(() => {
+                    showNotification(`${deletedCount} kullanıcı başarıyla silindi.`);
+                    setTimeout(() => location.reload(), 1500);
+                });
+            }
+        }
+
+        function exportUsers() {
+            const selected = getSelectedUsers();
+            const queryParams = new URLSearchParams();
+            
+            if (selected.length > 0) {
+                queryParams.append('selectedOnly', 'true');
+                selected.forEach(id => queryParams.append('userIds', id));
+            }
+            
+            // For now, just show notification - actual export would need server-side implementation
+            showNotification('Kullanıcı listesi Excel dosyası olarak indiriliyor...');
+            
+            // This would be the actual export URL when implemented
+            // window.location.href = '@Url.Action("ExportUsers")?' + queryParams.toString();
+        }
+
+        function editUser(userId) {
+            window.location.href = '@Url.Action("EditUser")/' + userId;
+        }
+
+        function viewUser(userId) {
+            window.location.href = '@Url.Action("ViewUser")/' + userId;
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+                const button = event.target.closest('button');
+                const originalContent = button.innerHTML;
+                button.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+                button.disabled = true;
+                
+                fetch('@Url.Action("DeleteUser")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: userId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Kullanıcı başarıyla silindi.');
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showNotification('Kullanıcı silinirken hata oluştu.', 'error');
+                        button.innerHTML = originalContent;
+                        button.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                });
+            }
+        }
+
+        // Add checkbox change listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.user-checkbox');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateSelectedCount);
+            });
+            
+            // Initialize count
+            updateSelectedCount();
+        });
+    </script>
+}

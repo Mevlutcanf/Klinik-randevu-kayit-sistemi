@@ -1,0 +1,189 @@
+@*
+    Modern Doctor Details Partial View for Admin
+*@
+
+@model dynamic
+
+<div class="doctor-details-container">
+    <div class="doctor-profile-section">
+        <div class="doctor-avatar-container">
+            <div class="doctor-avatar-wrapper">
+                <img src="@(Model.Doctor.ProfilePhotoPath ?? "/images/default-doctor.png")" 
+                     alt="Doktor Fotoğrafı" 
+                     class="doctor-avatar">
+                <div class="doctor-status-badge">
+                    <i class="bi bi-check-circle text-success"></i>
+                </div>
+            </div>
+            <div class="doctor-basic-info">
+                <h3 class="doctor-name">@Model.Doctor.AdSoyad</h3>
+                <p class="doctor-specialty">@(Model.Doctor.Uzmanlik ?? "Uzman Doktor")</p>
+                <div class="doctor-department">
+                    <span class="modern-badge badge-secondary">@(Model.Doctor.Department?.Name ?? "Genel")</span>
+                </div>
+                
+                <div class="doctor-rating">
+                    <div class="rating-stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Floor(Model.Rating))
+                            {
+                                <i class="bi bi-star-fill text-warning"></i>
+                            }
+                            else if (i <= Model.Rating)
+                            {
+                                <i class="bi bi-star-half text-warning"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-star text-muted"></i>
+                            }
+                        }
+                    </div>
+                    <span class="rating-score">@Model.Rating</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="doctor-details-grid">
+        <!-- İletişim Bilgileri -->
+        <div class="detail-card contact-card">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-blue">
+                    <i class="bi bi-person-lines-fill"></i>
+                </div>
+                <h4 class="detail-card-title">İletişim Bilgileri</h4>
+            </div>
+            <div class="detail-card-content">
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="bi bi-envelope"></i>
+                        Email
+                    </span>
+                    <span class="info-value">@Model.Doctor.Email</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="bi bi-telephone"></i>
+                        Telefon
+                    </span>
+                    <span class="info-value">@(Model.Doctor.PhoneNumber ?? "Belirtilmemiş")</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="bi bi-building"></i>
+                        Departman
+                    </span>
+                    <span class="info-value">
+                        <span class="modern-badge badge-info">@(Model.Doctor.Department?.Name ?? "Genel")</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- İstatistikler -->
+        <div class="detail-card stats-card">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-green">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <h4 class="detail-card-title">İstatistikler</h4>
+            </div>
+            <div class="detail-card-content">
+                <div class="stat-item">
+                    <div class="stat-number text-primary">@Model.AppointmentCount</div>
+                    <div class="stat-label">Toplam Randevu</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number text-success">@Model.Experience</div>
+                    <div class="stat-label">Deneyim</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number text-info">@Model.NextAppointment.ToString("dd.MM.yyyy")</div>
+                    <div class="stat-label">Sonraki Randevu</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hakkında -->
+        <div class="detail-card about-card full-width">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-purple">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h4 class="detail-card-title">Hakkında</h4>
+            </div>
+            <div class="detail-card-content">
+                <p class="about-text">@(Model.Doctor.About ?? "Doktor hakkında bilgi girilmemiş.")</p>
+            </div>
+        </div>
+        
+        <!-- Uzmanlık Alanları -->
+        <div class="detail-card specializations-card">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-orange">
+                    <i class="bi bi-award"></i>
+                </div>
+                <h4 class="detail-card-title">Uzmanlık Alanları</h4>
+            </div>
+            <div class="detail-card-content">
+                <div class="tags-container">
+                    @foreach (var specialization in Model.Specializations)
+                    {
+                        <span class="modern-tag tag-primary">@specialization</span>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sertifikalar -->
+        <div class="detail-card certifications-card">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-green">
+                    <i class="bi bi-patch-check"></i>
+                </div>
+                <h4 class="detail-card-title">Sertifikalar</h4>
+            </div>
+            <div class="detail-card-content">
+                <div class="tags-container">
+                    @foreach (var certification in Model.Certifications)
+                    {
+                        <span class="modern-tag tag-success">@certification</span>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- Eğitim -->
+        <div class="detail-card education-card">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-dark">
+                    <i class="bi bi-mortarboard"></i>
+                </div>
+                <h4 class="detail-card-title">Eğitim</h4>
+            </div>
+            <div class="detail-card-content">
+                <div class="education-info">
+                    <h5 class="education-title">@Model.Education</h5>
+                    <p class="education-year">Mezuniyet: @(Model.Doctor.MezuniyetYili ?? 2010)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Çalışma Saatleri -->
+        <div class="detail-card schedule-card">
+            <div class="detail-card-header">
+                <div class="detail-card-icon bg-gradient-blue">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <h4 class="detail-card-title">Çalışma Saatleri</h4>
+            </div>
+            <div class="detail-card-content">
+                <div class="schedule-text">@(Model.Doctor.CalismaSaatleri ?? "Pazartesi - Cuma: 09:00 - 17:00")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

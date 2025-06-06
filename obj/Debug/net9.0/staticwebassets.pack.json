@@ -2,19 +2,355 @@
   "Files": [
     {
       "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\randevu_kayit.bundle.scp.css",
-      "PackagePath": "staticwebassets\\randevu_kayit.62r0kzcpl1.bundle.scp.css"
+      "PackagePath": "staticwebassets\\randevu_kayit.317m7g7ni8.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\about-modern.css",
+      "PackagePath": "staticwebassets\\css\\about-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\admin-modern.css",
+      "PackagePath": "staticwebassets\\css\\admin-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\animate.min.css",
+      "PackagePath": "staticwebassets\\css\\animate.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\contact-modern.css",
+      "PackagePath": "staticwebassets\\css\\contact-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\default-skin.css",
+      "PackagePath": "staticwebassets\\css\\default-skin.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\font-awesome.min.css",
+      "PackagePath": "staticwebassets\\css\\font-awesome.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\home-modern.css",
+      "PackagePath": "staticwebassets\\css\\home-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\icomoon.css",
+      "PackagePath": "staticwebassets\\css\\icomoon.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\jquery-ui.css",
+      "PackagePath": "staticwebassets\\css\\jquery-ui.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\jquery.fancybox.min.css",
+      "PackagePath": "staticwebassets\\css\\jquery.fancybox.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\jquery.mCustomScrollbar.min.css",
+      "PackagePath": "staticwebassets\\css\\jquery.mCustomScrollbar.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\meanmenu.css",
+      "PackagePath": "staticwebassets\\css\\meanmenu.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\nice-select.css",
+      "PackagePath": "staticwebassets\\css\\nice-select.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\normalize.css",
+      "PackagePath": "staticwebassets\\css\\normalize.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\owl.carousel.min.css",
+      "PackagePath": "staticwebassets\\css\\owl.carousel.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\patient-appointments-modern.css",
+      "PackagePath": "staticwebassets\\css\\patient-appointments-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\quick-appointment.css",
+      "PackagePath": "staticwebassets\\css\\quick-appointment.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\quickappointment-modern.css",
+      "PackagePath": "staticwebassets\\css\\quickappointment-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\randevu-create-modern.css",
+      "PackagePath": "staticwebassets\\css\\randevu-create-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\randevu-modern.css",
+      "PackagePath": "staticwebassets\\css\\randevu-modern.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\responsive.css",
+      "PackagePath": "staticwebassets\\css\\responsive.css"
     },
     {
       "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\slick.css",
+      "PackagePath": "staticwebassets\\css\\slick.css"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\style.css",
+      "PackagePath": "staticwebassets\\css\\style.css"
+    },
+    {
       "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\Untitled-28.png",
+      "PackagePath": "staticwebassets\\images\\Untitled-28.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\banner-bg.png",
+      "PackagePath": "staticwebassets\\images\\banner-bg.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\call-icon.png",
+      "PackagePath": "staticwebassets\\images\\call-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\client-img.png",
+      "PackagePath": "staticwebassets\\images\\client-img.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\contact-bg.png",
+      "PackagePath": "staticwebassets\\images\\contact-bg.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\fb-icon.png",
+      "PackagePath": "staticwebassets\\images\\fb-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\footer-logo.png",
+      "PackagePath": "staticwebassets\\images\\footer-logo.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\hero-doctor.svg",
+      "PackagePath": "staticwebassets\\images\\hero-doctor.svg"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-1.png",
+      "PackagePath": "staticwebassets\\images\\icon-1.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-2.png",
+      "PackagePath": "staticwebassets\\images\\icon-2.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-3.png",
+      "PackagePath": "staticwebassets\\images\\icon-3.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-4.png",
+      "PackagePath": "staticwebassets\\images\\icon-4.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-5.png",
+      "PackagePath": "staticwebassets\\images\\icon-5.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-6.png",
+      "PackagePath": "staticwebassets\\images\\icon-6.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\icon-7.png",
+      "PackagePath": "staticwebassets\\images\\icon-7.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\img-1.png",
+      "PackagePath": "staticwebassets\\images\\img-1.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\img-2.png",
+      "PackagePath": "staticwebassets\\images\\img-2.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\img-3.png",
+      "PackagePath": "staticwebassets\\images\\img-3.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\instagram-icon.png",
+      "PackagePath": "staticwebassets\\images\\instagram-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\knowledge-bg.png",
+      "PackagePath": "staticwebassets\\images\\knowledge-bg.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\linkedin-icon.png",
+      "PackagePath": "staticwebassets\\images\\linkedin-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\logo.png",
+      "PackagePath": "staticwebassets\\images\\logo.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\mail-icon.png",
+      "PackagePath": "staticwebassets\\images\\mail-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\map-icon.png",
+      "PackagePath": "staticwebassets\\images\\map-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\pattern.svg",
+      "PackagePath": "staticwebassets\\images\\pattern.svg"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\play-icon.png",
+      "PackagePath": "staticwebassets\\images\\play-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\quote-icon.png",
+      "PackagePath": "staticwebassets\\images\\quote-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\right-arrow.png",
+      "PackagePath": "staticwebassets\\images\\right-arrow.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\search-icon.png",
+      "PackagePath": "staticwebassets\\images\\search-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\images\\twitter-icon.png",
+      "PackagePath": "staticwebassets\\images\\twitter-icon.png"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\img\\departments\\default.svg",
+      "PackagePath": "staticwebassets\\img\\departments\\default.svg"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\img\\logo.svg",
+      "PackagePath": "staticwebassets\\img\\logo.svg"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\custom.js",
+      "PackagePath": "staticwebassets\\js\\custom.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\jquery-3.0.0.min.js",
+      "PackagePath": "staticwebassets\\js\\jquery-3.0.0.min.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\jquery.mCustomScrollbar.concat.min.js",
+      "PackagePath": "staticwebassets\\js\\jquery.mCustomScrollbar.concat.min.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\jquery.min.js",
+      "PackagePath": "staticwebassets\\js\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\js\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\modernizer.js",
+      "PackagePath": "staticwebassets\\js\\modernizer.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\plugin.js",
+      "PackagePath": "staticwebassets\\js\\plugin.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\popper.min.js",
+      "PackagePath": "staticwebassets\\js\\popper.min.js"
+    },
+    {
       "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\js\\slider-setting.js",
+      "PackagePath": "staticwebassets\\js\\slider-setting.js"
     },
     {
       "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\lib\\bootstrap\\LICENSE",

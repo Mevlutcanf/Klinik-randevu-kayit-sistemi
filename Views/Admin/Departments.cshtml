@@ -1,0 +1,385 @@
+@model IEnumerable<randevu_kayit.Models.Department>
+@{
+    ViewData["Title"] = "Bölüm Yönetimi";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="modern-table fade-in">
+                    <div class="admin-card-header">
+                        <div class="d-flex align-items-center justify-content-between w-100">
+                            <div>
+                                <h6 class="mb-1">
+                                    <i class="bi bi-building text-primary me-2"></i>
+                                    @ViewData["Title"]
+                                </h6>
+                                <small class="opacity-75">Hastane bölümlerini yönetin ve düzenleyin</small>
+                            </div>
+                            <div>
+                                <button type="button" class="modern-btn primary" 
+                                        data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+                                    <i class="bi bi-plus-circle me-2"></i>Yeni Bölüm Ekle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modern-table-wrapper">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="80">Görsel</th>
+                                    <th>Bölüm Adı</th>
+                                    <th>Açıklama</th>
+                                    <th width="120">Doktor Sayısı</th>
+                                    <th width="120">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var department in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="department-image-modern">
+                                                @if (!string.IsNullOrEmpty(department.ImageUrl))
+                                                {
+                                                    <img src="@department.ImageUrl" alt="@department.Name">
+                                                }
+                                                else
+                                                {
+                                                    <div class="placeholder-image">
+                                                        <i class="bi bi-building"></i>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="department-info">
+                                                <h6 class="mb-0 text-dark">@department.Name</h6>
+                                                <small class="text-muted">Hastane Bölümü</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="text-sm text-muted">@department.Description</span>
+                                        </td>
+                                        <td>
+                                            <div class="text-center">
+                                                <span class="modern-badge info">
+                                                    <i class="bi bi-person-badge me-1"></i>
+                                                    @department.Doctors.Count
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <button type="button" class="modern-btn-icon info" 
+                                                        data-bs-toggle="modal" data-bs-target="#editDepartmentModal"
+                                                        data-id="@department.Id"
+                                                        data-name="@department.Name"
+                                                        data-description="@department.Description"
+                                                        data-image="@department.ImageUrl"
+                                                        title="Düzenle">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+                                                @if (!department.Doctors.Any())
+                                                {
+                                                    <form asp-action="DeleteDepartment" method="post" style="display: inline;">
+                                                        <input type="hidden" name="id" value="@department.Id" />
+                                                        <button type="submit" class="modern-btn-icon danger" 
+                                                                onclick="return confirm('Bu bölümü silmek istediğinizden emin misiniz?')"
+                                                                title="Sil">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="modern-btn-icon danger" 
+                                                            title="Bu bölümde doktor bulunduğu için silinemez" disabled>
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="modern-table fade-in">
+                    <div class="admin-card-header">
+                        <div>
+                            <h6 class="mb-1">
+                                <i class="bi bi-pie-chart text-info me-2"></i>
+                                Bölüm İstatistikleri
+                            </h6>
+                            <small class="opacity-75">Doktor dağılımı</small>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="chart-container">
+                            <canvas id="departmentChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>        </div>
+    </div>
+</div>
+
+<!-- Add Department Modal -->
+<div class="modal fade" id="addDepartmentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modern-modal">
+            <form asp-action="AddDepartment" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle text-primary me-2"></i>
+                        Yeni Bölüm Ekle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="modern-form-label">Bölüm Adı</label>
+                        <input type="text" name="name" class="modern-form-control" placeholder="Bölüm adını giriniz" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Açıklama</label>
+                        <textarea name="description" class="modern-form-control" rows="3" placeholder="Bölüm açıklaması..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Bölüm Görseli</label>
+                        <input type="file" name="image" class="modern-form-control" accept="image/*">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Önerilen boyut: 800x600 piksel
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modern-btn outline" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="modern-btn primary">
+                        <i class="bi bi-save me-2"></i>Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Department Modal -->
+<div class="modal fade" id="editDepartmentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modern-modal">
+            <form asp-action="UpdateDepartment" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square text-info me-2"></i>
+                        Bölüm Düzenle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="departmentId">
+                    <div class="mb-3">
+                        <label class="modern-form-label">Bölüm Adı</label>
+                        <input type="text" name="name" id="departmentName" class="modern-form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Açıklama</label>
+                        <textarea name="description" id="departmentDescription" class="modern-form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="modern-form-label">Mevcut Görsel</label>
+                        <div class="current-image-preview mb-3">
+                            <img id="currentImage" src="" alt="Mevcut görsel" style="max-width: 200px; display: none;">
+                        </div>
+                        <label class="modern-form-label">Yeni Görsel</label>
+                        <input type="file" name="image" class="modern-form-control" accept="image/*">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Yeni görsel seçmezseniz mevcut görsel korunacaktır
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modern-btn outline" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="modern-btn primary">
+                        <i class="bi bi-save me-2"></i>Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Modal edit functionality
+            $('#editDepartmentModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                
+                modal.find('#departmentId').val(button.data('id'));
+                modal.find('#departmentName').val(button.data('name'));
+                modal.find('#departmentDescription').val(button.data('description'));
+                
+                var imageUrl = button.data('image');
+                var currentImage = modal.find('#currentImage');
+                if (imageUrl) {
+                    currentImage.attr('src', imageUrl).show();
+                } else {
+                    currentImage.hide();
+                }
+            });
+
+            // Enhanced Department Chart with modern styling
+            var ctx = document.getElementById("departmentChart").getContext("2d");
+            
+            // Create gradient colors
+            var gradientColors = [
+                createGradient(ctx, '#4f46e5', '#818cf8'),
+                createGradient(ctx, '#059669', '#34d399'),
+                createGradient(ctx, '#dc2626', '#f87171'),
+                createGradient(ctx, '#0891b2', '#67e8f9'),
+                createGradient(ctx, '#c2410c', '#fdba74'),
+                createGradient(ctx, '#7c3aed', '#c4b5fd'),
+                createGradient(ctx, '#be185d', '#f9a8d4'),
+                createGradient(ctx, '#365314', '#a3e635'),
+                createGradient(ctx, '#1e40af', '#93c5fd'),
+                createGradient(ctx, '#991b1b', '#fca5a5')
+            ];
+
+            new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: [@Html.Raw(string.Join(",", Model.Select(d => $"'{d.Name}'")))],
+                    datasets: [{
+                        data: [@string.Join(",", Model.Select(d => d.Doctors.Count))],
+                        backgroundColor: gradientColors,
+                        borderWidth: 0,
+                        cutout: '60%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            cornerRadius: 8,
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1000
+                    }
+                }
+            });
+
+            // Helper function to create gradients
+            function createGradient(ctx, color1, color2) {
+                var gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                gradient.addColorStop(0, color1);
+                gradient.addColorStop(1, color2);
+                return gradient;
+            }
+
+            // Form animations
+            $('.modern-table').addClass('fade-in');
+            
+            // File input enhancement
+            $('input[type="file"]').on('change', function() {
+                const fileName = $(this).val().split('\\').pop();
+                if (fileName) {
+                    $(this).next('.text-muted').html(`<i class="bi bi-check-circle text-success me-1"></i>Seçilen dosya: ${fileName}`);
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .department-image-modern {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        position: relative;
+    }
+    
+    .department-image-modern img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .department-image-modern:hover img {
+        transform: scale(1.05);
+    }
+    
+    .placeholder-image {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+    
+    .department-info h6 {
+        font-weight: 600;
+        color: var(--admin-text-primary);
+    }
+    
+    .current-image-preview {
+        border: 2px dashed var(--admin-border);
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        background: rgba(var(--admin-primary-rgb), 0.02);
+    }
+    
+    .current-image-preview img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .chart-container {
+        position: relative;
+        height: 300px;
+    }
+    
+    .text-purple {
+        color: #8b5cf6 !important;
+    }
+</style>

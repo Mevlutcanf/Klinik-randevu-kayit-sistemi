@@ -1,0 +1,20 @@
+.text-center[b-tgla0q0kll] {
+  text-align: center;
+  padding: 50px;
+}
+
+.display-4[b-tgla0q0kll] {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+a[b-tgla0q0kll] {
+  font-weight: bold;
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover[b-tgla0q0kll] {
+  text-decoration: underline;
+}

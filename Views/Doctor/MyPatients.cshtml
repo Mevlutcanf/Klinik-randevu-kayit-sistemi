@@ -1,0 +1,27 @@
+@model IEnumerable<randevu_kayit.Models.Patient>
+
+<h2>Hastalarım</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Email</td>
+                <td>
+                    <a asp-action="PatientDetails" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detay</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

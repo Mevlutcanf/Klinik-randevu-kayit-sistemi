@@ -1,0 +1,177 @@
+@{
+    ViewData["Title"] = "Hızlı Randevu Al";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">@ViewData["Title"]</h5>
+                    <p class="text-muted mb-0">Hızlı ve kolay randevu alma sistemi</p>
+                </div>
+                <div class="card-body">
+                    <form id="quickAppointmentForm">
+                        <div class="mb-3">
+                            <label class="form-label">Bölüm</label>
+                            <select id="department" class="form-select" required>
+                                <option value="">Bölüm Seçiniz</option>
+                                @foreach (var dept in ViewBag.Departments)
+                                {
+                                    <option value="@dept.Id">@dept.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Doktor</label>
+                            <select id="doctor" class="form-select" required disabled>
+                                <option value="">Önce Bölüm Seçiniz</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tarih</label>
+                            <input type="date" id="appointmentDate" class="form-control" required 
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Saat</label>
+                            <select id="appointmentTime" class="form-select" required disabled>
+                                <option value="">Önce Tarih Seçiniz</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" disabled>
+                            <i class="bi bi-calendar-check me-2"></i>Randevu Al
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const doctors = @Html.Raw(Json.Serialize(ViewBag.Doctors));
+            const $department = $('#department');
+            const $doctor = $('#doctor');
+            const $date = $('#appointmentDate');
+            const $time = $('#appointmentTime');
+            const $submit = $('button[type="submit"]');
+
+            // Department change handler
+            $department.change(function() {
+                const departmentId = $(this).val();
+                $doctor.empty().append('<option value="">Doktor Seçiniz</option>');
+                
+                if (departmentId) {
+                    const departmentDoctors = doctors.filter(d => d.departmentId == departmentId);
+                    departmentDoctors.forEach(doctor => {
+                        $doctor.append(`<option value="${doctor.id}">${doctor.adSoyad}</option>`);
+                    });
+                    $doctor.prop('disabled', false);
+                } else {
+                    $doctor.prop('disabled', true);
+                }
+                
+                resetDateAndTime();
+            });
+
+            // Doctor change handler
+            $doctor.change(function() {
+                if ($(this).val()) {
+                    $date.prop('disabled', false);
+                } else {
+                    $date.prop('disabled', true);
+                }
+                resetDateAndTime();
+            });
+
+            // Date change handler
+            $date.change(function() {
+                const doctorId = $doctor.val();
+                const date = $(this).val();
+                
+                if (!doctorId || !date) {
+                    resetTime();
+                    return;
+                }
+
+                $.post('/QuickAppointment/GetAvailableSlots', {
+                    doctorId: doctorId,
+                    date: date
+                }, function(response) {
+                    if (response.success) {
+                        $time.empty().append('<option value="">Saat Seçiniz</option>');
+                        response.slots.forEach(slot => {
+                            $time.append(`<option value="${slot}">${slot}</option>`);
+                        });
+                        $time.prop('disabled', false);
+                    } else {
+                        alert(response.message);
+                        resetTime();
+                    }
+                });
+            });
+
+            // Time change handler
+            $time.change(function() {
+                $submit.prop('disabled', !$(this).val());
+            });
+
+            // Form submit handler
+            $('#quickAppointmentForm').submit(function(e) {
+                e.preventDefault();
+                
+                const doctorId = $doctor.val();
+                const appointmentDate = $date.val();
+                const appointmentTime = $time.val();
+
+                $.post('/QuickAppointment/Create', {
+                    doctorId: doctorId,
+                    appointmentDate: appointmentDate,
+                    appointmentTime: appointmentTime
+                }, function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.href = '/Patient/Appointments';
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+
+            function resetDateAndTime() {
+                $date.val('');
+                resetTime();
+            }
+
+            function resetTime() {
+                $time.empty().append('<option value="">Önce Tarih Seçiniz</option>');
+                $time.prop('disabled', true);
+                $submit.prop('disabled', true);
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .card {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem;
+        }
+    </style>
+} 

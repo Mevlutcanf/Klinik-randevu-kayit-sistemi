@@ -1,0 +1,57 @@
+@model randevu_kayit.Models.Randevu
+
+@{
+    ViewData["Title"] = "Randevu İptal";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Randevu İptal Onayı</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h4>Bu randevuyu iptal etmek istediğinizden emin misiniz?</h4>
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-3">Hasta:</dt>
+                        <dd class="col-sm-9">@Model.Hasta?.AdSoyad</dd>
+
+                        <dt class="col-sm-3">Doktor:</dt>
+                        <dd class="col-sm-9">@Model.Doktor?.AdSoyad</dd>
+
+                        <dt class="col-sm-3">Tarih:</dt>
+                        <dd class="col-sm-9">@Model.RandevuTarihi.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-3">Şikayet:</dt>
+                        <dd class="col-sm-9">@Model.Sikayet</dd>
+
+                        <dt class="col-sm-3">Doktor Notu:</dt>
+                        <dd class="col-sm-9">@Model.DoktorNotu</dd>
+
+                        <dt class="col-sm-3">Durum:</dt>
+                        <dd class="col-sm-9">@Model.Durum</dd>
+                    </dl>
+
+                    <form asp-action="Delete" class="d-inline">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-x-circle"></i> İptal Et
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Listeye Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,333 @@
+@model IEnumerable<randevu_kayit.Models.Randevu>
+@using randevu_kayit.Models
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<link rel="stylesheet" href="~/css/randevu-modern.css" />
+
+<!-- Modern Hero Section -->
+<div class="appointment-hero-section position-relative overflow-hidden mb-5">
+    <div class="hero-background-gradient"></div>
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold text-white mb-3 animate-fade-in">
+                    <i class="bi bi-calendar-heart me-3"></i>@ViewData["Title"]
+                </h1>
+                <p class="lead text-white-50 mb-4 animate-fade-in-delay">
+                    Randevularınızı takip edin, yönetin ve sağlık yolculuğunuzu planlayın.
+                </p>
+                <div class="appointment-stats d-flex gap-4 mb-4">
+                    <div class="stat-item">
+                        <div class="stat-number">@Model.Count()</div>
+                        <div class="stat-label">Toplam Randevu</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">@Model.Count(r => r.Durum == RandevuDurumu.Aktif)</div>
+                        <div class="stat-label">Aktif Randevu</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">@Model.Count(r => r.Durum == RandevuDurumu.Tamamlandi)</div>
+                        <div class="stat-label">Tamamlanan</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                @if (User.IsInRole("Patient"))
+                {
+                    <a asp-action="Create" class="btn btn-light btn-lg px-4 py-3 animate-bounce-in">
+                        <i class="bi bi-plus-circle me-2"></i>Yeni Randevu Al
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid";
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm animate-slide-down" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Quick Filter Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="filter-card active" data-filter="all" onclick="filterAppointments('all', this)">
+                <div class="filter-icon">
+                    <i class="bi bi-list-ul"></i>
+                </div>
+                <div class="filter-content">
+                    <h6>Tüm Randevular</h6>
+                    <span class="filter-count">@Model.Count()</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="filter-card" data-filter="aktif" onclick="filterAppointments('aktif', this)">
+                <div class="filter-icon text-success">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div class="filter-content">
+                    <h6>Aktif Randevular</h6>
+                    <span class="filter-count">@Model.Count(r => r.Durum == RandevuDurumu.Aktif)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="filter-card" data-filter="tamamlandi" onclick="filterAppointments('tamamlandi', this)">
+                <div class="filter-icon text-primary">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="filter-content">
+                    <h6>Tamamlanan</h6>
+                    <span class="filter-count">@Model.Count(r => r.Durum == RandevuDurumu.Tamamlandi)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="filter-card" data-filter="iptal" onclick="filterAppointments('iptal', this)">
+                <div class="filter-icon text-danger">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div class="filter-content">
+                    <h6>İptal Edilen</h6>
+                    <span class="filter-count">@Model.Count(r => r.Durum == RandevuDurumu.Iptal)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Appointment Cards -->
+    @if (Model.Any())
+    {
+        <div class="row" id="appointmentCards">
+            @foreach (var randevu in Model.OrderByDescending(r => r.RandevuTarihi))
+            {
+                <div class="col-lg-6 col-xl-4 mb-4 appointment-card-wrapper" data-status="@randevu.Durum.ToString().ToLower()">
+                    <div class="appointment-card shadow-sm h-100">
+                        <!-- Card Header -->
+                        <div class="card-header-custom bg-@(randevu.Durum == RandevuDurumu.Aktif ? "success" :
+                                                                 randevu.Durum == RandevuDurumu.Tamamlandi ? "primary" :
+                                                                 randevu.Durum == RandevuDurumu.Iptal ? "danger" : "warning")-subtle">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="appointment-date">
+                                    <div class="date-day">@randevu.RandevuTarihi.ToString("dd")</div>
+                                    <div class="date-month">@randevu.RandevuTarihi.ToString("MMM")</div>
+                                </div>
+                                <div class="appointment-status">
+                                    <span class="badge bg-@(randevu.Durum == RandevuDurumu.Aktif ? "success" :
+                                                             randevu.Durum == RandevuDurumu.Tamamlandi ? "primary" :
+                                                             randevu.Durum == RandevuDurumu.Iptal ? "danger" : "warning") badge-lg">
+                                        @(randevu.Durum == RandevuDurumu.Aktif ? "Aktif" :
+                                          randevu.Durum == RandevuDurumu.Tamamlandi ? "Tamamlandı" :
+                                          randevu.Durum == RandevuDurumu.Iptal ? "İptal Edildi" : randevu.Durum.ToString())
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Body -->
+                        <div class="card-body p-4">
+                            <div class="doctor-info mb-3">
+                                <div class="doctor-avatar">
+                                    <img src="@(randevu.Doktor?.ProfilePhotoPath ?? "/images/default-doctor.png")" 
+                                         alt="@randevu.Doktor?.AdSoyad" class="rounded-circle">
+                                </div>
+                                <div class="doctor-details">
+                                    <h6 class="doctor-name mb-1">@randevu.Doktor?.AdSoyad</h6>
+                                    <p class="doctor-department text-muted mb-0">
+                                        <i class="bi bi-building me-1"></i>@randevu.Doktor?.Department?.Name
+                                    </p>
+                                    @if (!string.IsNullOrEmpty(randevu.Doktor?.Uzmanlik))
+                                    {
+                                        <p class="doctor-specialty text-muted mb-0">
+                                            <i class="bi bi-award me-1"></i>@randevu.Doktor?.Uzmanlik
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div class="appointment-time mb-3">
+                                <i class="bi bi-clock text-primary me-2"></i>
+                                <strong>@randevu.RandevuTarihi.ToString("HH:mm")</strong>
+                                <span class="text-muted">(@randevu.RandevuTarihi.ToString("dddd, dd MMMM yyyy", new System.Globalization.CultureInfo("tr-TR")))</span>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(randevu.Sikayet))
+                            {
+                                <div class="appointment-complaint mb-3">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-chat-left-text me-2"></i>Şikayetiniz:
+                                    </h6>
+                                    <p class="complaint-text">@randevu.Sikayet</p>
+                                </div>
+                            }
+                            
+                            @if (!string.IsNullOrEmpty(randevu.DoktorNotu))
+                            {
+                                <div class="doctor-note mb-3">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-stethoscope me-2"></i>Doktor Notu:
+                                    </h6>
+                                    <p class="note-text">@randevu.DoktorNotu</p>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Card Footer -->
+                        @if (randevu.Durum == RandevuDurumu.Aktif)
+                        {
+                            <div class="card-footer bg-transparent border-top-0 pt-0">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-danger" onclick="cancelAppointment(@randevu.Id)">
+                                        <i class="bi bi-x-circle me-2"></i>Randevuyu İptal Et
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="empty-state">
+                <i class="bi bi-calendar-x display-1 text-muted mb-4"></i>
+                <h4 class="text-muted mb-3">Henüz randevunuz bulunmuyor</h4>
+                <p class="text-muted mb-4">İlk randevunuzu oluşturmak için aşağıdaki butona tıklayın.</p>
+                @if (User.IsInRole("Patient"))
+                {
+                    <a asp-action="Create" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>İlk Randevunuzu Alın
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function filterAppointments(status, element) {
+            // Update active filter card
+            $('.filter-card').removeClass('active');
+            $(element).addClass('active');
+            
+            // Filter appointment cards
+            if (status === 'all') {
+                $('.appointment-card-wrapper').fadeIn(300);
+            } else {
+                $('.appointment-card-wrapper').hide();
+                $(`.appointment-card-wrapper[data-status="${status}"]`).fadeIn(300);
+            }
+            
+            // Update empty state
+            setTimeout(() => {
+                const visibleCards = $('.appointment-card-wrapper:visible').length;
+                if (visibleCards === 0) {
+                    if ($('#emptyFilterState').length === 0) {
+                        $('#appointmentCards').after(`
+                            <div id="emptyFilterState" class="text-center py-5">
+                                <i class="bi bi-search display-1 text-muted mb-4"></i>
+                                <h4 class="text-muted mb-3">Bu durumda randevu bulunamadı</h4>
+                                <p class="text-muted">Farklı bir filtre seçarak tekrar deneyin.</p>
+                            </div>
+                        `);
+                    }
+                    $('#emptyFilterState').fadeIn(300);
+                } else {
+                    $('#emptyFilterState').fadeOut(300);
+                }
+            }, 350);
+        }
+
+        function cancelAppointment(id) {
+            Swal.fire({
+                title: 'Randevuyu İptal Et',
+                text: 'Bu randevuyu iptal etmek istediğinizden emin misiniz?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, İptal Et',
+                cancelButtonText: 'Vazgeç',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'İşlem yapılıyor...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    $.post('/Randevu/Cancel/' + id)
+                        .done(function(response) {
+                            Swal.fire({
+                                title: 'Başarılı!',
+                                text: 'Randevunuz başarıyla iptal edildi.',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        })
+                        .fail(function() {
+                            Swal.fire({
+                                title: 'Hata!',
+                                text: 'Randevu iptal edilirken bir hata oluştu.',
+                                icon: 'error'
+                            });
+                        });
+                }
+            });
+        }
+
+        // Initialize animations
+        $(document).ready(function() {
+            // Animate cards on load
+            $('.appointment-card-wrapper').each(function(index) {
+                $(this).css({
+                    'opacity': '0',
+                    'transform': 'translateY(30px)'
+                });
+                
+                setTimeout(() => {
+                    $(this).animate({
+                        'opacity': 1
+                    }, 500).css({
+                        'transform': 'translateY(0)'
+                    });
+                }, index * 100);
+            });
+            
+            // Add hover effects
+            $('.appointment-card').hover(
+                function() {
+                    $(this).css('transform', 'translateY(-5px)');
+                },
+                function() {
+                    $(this).css('transform', 'translateY(0)');
+                }
+            );
+        });
+    </script>
+}
+
+@section Styles {
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}

@@ -1,0 +1,278 @@
+/* Modern About Page Styles */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --accent-color: #3b82f6;
+    --success-color: #10b981;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --bg-light: #f9fafb;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --border-radius: 12px;
+    --border-radius-lg: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Container Enhancement */
+.container {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.container > .row {
+    position: relative;
+    z-index: 1;
+}
+
+/* Header Styling */
+.display-4 {
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+    position: relative;
+}
+
+.display-4::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-top: 1.5rem;
+}
+
+/* Card Enhancements */
+.card {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.card-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.card-text {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* Icon Enhancements */
+.bi {
+    filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.2));
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: var(--success-color) !important;
+}
+
+/* Statistics Cards */
+.card h2 {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+}
+
+.card .bi {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Values Section */
+.col-md-4 .d-flex {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.col-md-4 .d-flex:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(59, 130, 246, 0.05));
+    transform: translateX(5px);
+}
+
+.col-md-4 h5 {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.col-md-4 .text-muted {
+    color: var(--text-secondary) !important;
+    line-height: 1.6;
+}
+
+/* Check Icons */
+.bi-check-circle-fill {
+    background: linear-gradient(135deg, var(--success-color), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3));
+}
+
+/* Statistics Section */
+.text-center h3 {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.text-center h3::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+    border-radius: 1.5px;
+}
+
+/* Statistics Cards Special Styling */
+.row .col-6.col-md-3 .card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+    border: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+.row .col-6.col-md-3 .card:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(59, 130, 246, 0.05));
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.row .col-6.col-md-3 .card h2 {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem 0;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .d-flex.align-items-center {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .d-flex.align-items-center .bi {
+        margin-bottom: 1rem;
+        margin-right: 0 !important;
+    }
+    
+    .col-md-4 .d-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .col-md-4 .bi {
+        margin-bottom: 0.5rem;
+        margin-right: 0 !important;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Indicators */
+.card:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}

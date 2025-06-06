@@ -1,9 +1,846 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using randevu_kayit.Models
+@{
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p> bu bir deneme yazısısdır. </p>
+<link rel="stylesheet" href="~/css/home-modern.css" />
+
+<!-- Hero Section with Animated Background -->
+<div class="hero-section position-relative overflow-hidden">
+    <div class="hero-background"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+    
+    <div class="container position-relative z-3 text-white text-center py-5">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6 text-lg-start text-center">
+                <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+                    Sağlığınız İçin <span class="text-gradient">Buradayız</span>
+                </h1>
+                <p class="lead mb-4 fs-5 animate-fade-in-delay">
+                    Modern tıbbi teknoloji ve uzman kadromuzla kaliteli sağlık hizmeti sunuyoruz. 
+                    Güvenilir, hızlı ve hasta odaklı yaklaşımımızla yanınızdayız.
+                </p>
+                
+                <div class="hero-stats row g-3 mb-4 text-center animate-slide-up">
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <h3 class="fw-bold mb-1">50+</h3>
+                            <small class="text-white-50">Uzman Doktor</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <h3 class="fw-bold mb-1">1000+</h3>
+                            <small class="text-white-50">Hasta Memnuniyeti</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <h3 class="fw-bold mb-1">24/7</h3>
+                            <small class="text-white-50">Hizmet</small>
+                        </div>
+                    </div>
+                </div>
+                
+                @if (!User.Identity?.IsAuthenticated ?? false)
+                {
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-start animate-bounce-in">
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-person-plus me-2"></i>Hemen Kayıt Ol
+                        </a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-4 py-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Giriş Yap
+                        </a>
+                    </div>
+                }
+                else if (!User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                {
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-start animate-bounce-in">
+                        <a asp-controller="Randevu" asp-action="Create" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-calendar-plus me-2"></i>Randevu Al
+                        </a>
+                        <a asp-controller="QuickAppointment" asp-action="Index" class="btn btn-outline-light btn-lg px-4 py-3">
+                            <i class="bi bi-lightning me-2"></i>Hızlı Randevu
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image-container animate-float">
+                    <div class="hero-card">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-circle bg-primary text-white me-3">
+                                        <i class="bi bi-heart-pulse"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Dr. Ahmet Yılmaz</h6>
+                                        <small class="text-muted">Kardiyolog</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Bugün 14:30'da randevunuz var</p>
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-outline-primary btn-sm">Detaylar</button>
+                                    <button class="btn btn-primary btn-sm">Randevu Al</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="container py-5">
+    <!-- Öne Çıkan Özellikler -->
+    <section class="features-section py-5" data-aos="fade-up">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary-soft text-primary px-3 py-2 mb-3">Özelliklerimiz</span>
+            <h2 class="display-5 fw-bold mb-3">Neden Bizi Tercih Etmelisiniz?</h2>
+            <p class="lead text-muted">Sağlık hizmetlerinde kalite, güven ve hasta memnuniyeti önceliğimiz</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card h-100">
+                    <div class="feature-icon-wrapper bg-primary-gradient mb-4">
+                        <i class="bi bi-heart-pulse text-white"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Uzman Kadro</h4>
+                    <p class="text-muted mb-4">
+                        Alanında uzman doktorlarımız ve deneyimli sağlık personelimizle 
+                        en iyi tıbbi hizmeti sunuyoruz.
+                    </p>
+                    <div class="feature-stats">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <strong class="text-primary d-block">50+</strong>
+                                <small class="text-muted">Uzman Doktor</small>
+                            </div>
+                            <div class="col-6">
+                                <strong class="text-primary d-block">15+</strong>
+                                <small class="text-muted">Branş</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card h-100">
+                    <div class="feature-icon-wrapper bg-success-gradient mb-4">
+                        <i class="bi bi-calendar-check text-white"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Kolay Randevu</h4>
+                    <p class="text-muted mb-4">
+                        Online randevu sistemi ile 7/24 randevu alabilir, 
+                        randevularınızı kolayca yönetebilirsiniz.
+                    </p>
+                    <div class="feature-highlights">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <small>Online Randevu</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <small>SMS Hatırlatma</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <small>Hızlı Randevu</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card h-100">
+                    <div class="feature-icon-wrapper bg-info-gradient mb-4">
+                        <i class="bi bi-hospital text-white"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Modern Tesisler</h4>
+                    <p class="text-muted mb-4">
+                        En son teknoloji ile donatılmış modern tesislerimizde 
+                        güvenli ve konforlu bir tedavi ortamı sunuyoruz.
+                    </p>
+                    <div class="feature-tech">
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <div class="tech-badge bg-light rounded-pill px-3 py-2 mb-2">
+                                    <i class="bi bi-wifi text-primary me-1"></i>
+                                    <small>Dijital Hastane</small>
+                                </div>
+                                <div class="tech-badge bg-light rounded-pill px-3 py-2">
+                                    <i class="bi bi-shield-check text-success me-1"></i>
+                                    <small>Güvenli Sistem</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bölümlerimiz -->
+    <section class="departments-section py-5" data-aos="fade-up">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary-soft text-primary px-3 py-2 mb-3">Polikliniklerimiz</span>
+            <h2 class="display-5 fw-bold mb-3">Sağlık Hizmetlerimiz</h2>
+            <p class="lead text-muted">15 farklı branşta uzman doktorlarımızla hizmetinizdeyiz</p>
+        </div>
+        
+        <div class="row g-4">
+            @{
+                var departmentsList = ViewBag.Departments as List<Department>;
+                var departments = departmentsList ?? new List<Department>
+                {
+                    new Department { Name = "Dahiliye", Description = "İç hastalıkları tanı ve tedavi", ImageUrl = "/img/departments/dahiliye.jpg" },
+                    new Department { Name = "Kardiyoloji", Description = "Kalp ve damar hastalıkları", ImageUrl = "/img/departments/kardiyoloji.jpg" },
+                    new Department { Name = "Göz Hastalıkları", Description = "Göz muayene ve ameliyatları", ImageUrl = "/img/departments/goz.jpg" },
+                    new Department { Name = "Ortopedi", Description = "Kemik ve eklem hastalıkları", ImageUrl = "/img/departments/ortopedi.jpg" },
+                    new Department { Name = "Nöroloji", Description = "Sinir sistemi hastalıkları", ImageUrl = "/img/departments/noroloji.jpg" },
+                    new Department { Name = "Psikiyatri", Description = "Ruh sağlığı hizmetleri", ImageUrl = "/img/departments/psikiyatri.jpg" },
+                    new Department { Name = "Dermatoloji", Description = "Cilt hastalıkları", ImageUrl = "/img/departments/dermatoloji.jpg" },
+                    new Department { Name = "Kulak Burun Boğaz", Description = "KBB hastalıkları", ImageUrl = "/img/departments/kbb.jpg" }
+                };
+            }
+            
+            @{
+                var index = 0;
+            }
+            @foreach (var dept in departments.Take(8))
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="@(index * 100)">
+                    <div class="department-card h-100">
+                        <div class="card border-0 shadow-sm h-100 position-relative overflow-hidden">
+                            <div class="card-img-overlay-gradient"></div>
+                            <div class="department-icon">
+                                <i class="bi bi-@(dept.Name.ToLower() switch {
+                                    "dahiliye" => "heart-pulse",
+                                    "kardiyoloji" => "heart",
+                                    "göz hastalıkları" => "eye",
+                                    "ortopedi" => "bandaid",
+                                    "nöroloji" => "lightning",
+                                    "psikiyatri" => "emoji-smile",
+                                    "dermatoloji" => "droplet",
+                                    "kulak burun boğaz" => "headphones",
+                                    _ => "hospital"
+                                })"></i>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold mb-2">@dept.Name</h5>
+                                <p class="card-text text-muted mb-3 flex-grow-1">@(dept.Description ?? "Uzman doktorlarımızla hizmetinizdeyiz")</p>
+                                
+                                @if (User.Identity?.IsAuthenticated ?? false && !User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                                {
+                                    <div class="mt-auto">
+                                        <a asp-controller="Randevu" asp-action="Create" 
+                                           asp-route-departmentId="@dept.Id" 
+                                           class="btn btn-primary btn-sm w-100">
+                                            <i class="bi bi-calendar-plus me-1"></i>Randevu Al
+                                        </a>
+                                    </div>
+                                }
+                                else if (!User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <div class="mt-auto">
+                                        <a asp-controller="Account" asp-action="Login" 
+                                           class="btn btn-outline-primary btn-sm w-100">
+                                            <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                index++;
+            }
+        </div>
+        
+        @if ((departments?.Count() ?? 0) > 8)
+        {
+            <div class="text-center mt-4">
+                <button class="btn btn-outline-primary btn-lg" onclick="showAllDepartments()">
+                    <i class="bi bi-grid me-2"></i>Tüm Bölümleri Gör (@((departments?.Count() ?? 0) - 8) daha)
+                </button>
+            </div>
+        }
+    </section>
+
+    <!-- Doktorlarımız -->
+    <section class="doctors-section py-5 bg-light" data-aos="fade-up">
+        <div class="text-center mb-5">
+            <span class="badge bg-success-soft text-success px-3 py-2 mb-3">Ekibimiz</span>
+            <h2 class="display-5 fw-bold mb-3">Uzman Doktorlarımız</h2>
+            <p class="lead text-muted">Alanında uzman, deneyimli doktorlarımızla sağlığınızı güvence altına alıyoruz</p>
+        </div>
+        
+        <div class="row g-4">
+            @{
+                var doctorsList = ViewBag.Doctors as List<ApplicationUser>;
+                var doctors = doctorsList ?? new List<ApplicationUser>();
+                var featuredDoctors = doctors.Take(4);
+            }
+            
+            @if (featuredDoctors.Any())
+            {
+                @foreach (var doctor in featuredDoctors)
+                {
+                    <div class="col-lg-3 col-md-6" data-aos="flip-up" data-aos-delay="@(featuredDoctors.ToList().IndexOf(doctor) * 150)">
+                        <div class="doctor-card h-100">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="doctor-avatar mb-3 position-relative">
+                                        @if (!string.IsNullOrEmpty(doctor.ProfilePhotoPath))
+                                        {
+                                            <img src="@doctor.ProfilePhotoPath" alt="Dr. @doctor.AdSoyad" 
+                                                 class="rounded-circle img-fluid doctor-photo">
+                                        }
+                                        else
+                                        {
+                                            <div class="doctor-placeholder rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-person-circle"></i>
+                                            </div>
+                                        }
+                                        <div class="doctor-status">
+                                            <span class="badge bg-success">Aktif</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5 class="card-title fw-bold mb-1">Dr. @doctor.AdSoyad</h5>
+                                    <p class="text-primary fw-medium mb-2">@(doctor.Uzmanlik ?? "Uzman Doktor")</p>
+                                    <p class="text-muted small mb-3">@(doctor.Department?.Name ?? "Genel")</p>
+                                    
+                                    <div class="doctor-rating mb-3">
+                                        <div class="stars text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                        <small class="text-muted ms-1">(4.8/5)</small>
+                                    </div>
+                                    
+                                    @if (!string.IsNullOrEmpty(doctor.About))
+                                    {
+                                        <p class="small text-muted mb-3">@doctor.About.Substring(0, Math.Min(80, doctor.About.Length))@(doctor.About.Length > 80 ? "..." : "")</p>
+                                    }
+                                    
+                                    @if (User.Identity?.IsAuthenticated ?? false && !User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                                    {
+                                        <a asp-controller="Randevu" asp-action="Create" 
+                                           asp-route-doctorId="@doctor.Id" 
+                                           class="btn btn-primary btn-sm w-100">
+                                            <i class="bi bi-calendar-plus me-1"></i>Randevu Al
+                                        </a>
+                                    }
+                                    else if (!User.Identity?.IsAuthenticated ?? false)
+                                    {
+                                        <a asp-controller="Account" asp-action="Login" 
+                                           class="btn btn-outline-primary btn-sm w-100">
+                                            <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Sample doctors when no data available -->
+                @for (int i = 0; i < 4; i++)
+                {
+                    var sampleDoctors = new[] { 
+                        new { Name = "Ahmet Yılmaz", Specialty = "Kardiyolog", Department = "Kardiyoloji" },
+                        new { Name = "Ayşe Demir", Specialty = "Göz Doktoru", Department = "Göz Hastalıkları" },
+                        new { Name = "Mehmet Kaya", Specialty = "Ortopedist", Department = "Ortopedi" },
+                        new { Name = "Fatma Şahin", Specialty = "Dahiliyeci", Department = "Dahiliye" }
+                    };
+                    var doctor = sampleDoctors[i];
+                    
+                    <div class="col-lg-3 col-md-6" data-aos="flip-up" data-aos-delay="@(i * 150)">
+                        <div class="doctor-card h-100">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="doctor-avatar mb-3 position-relative">
+                                        <div class="doctor-placeholder rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-person-circle"></i>
+                                        </div>
+                                        <div class="doctor-status">
+                                            <span class="badge bg-success">Aktif</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5 class="card-title fw-bold mb-1">Dr. @doctor.Name</h5>
+                                    <p class="text-primary fw-medium mb-2">@doctor.Specialty</p>
+                                    <p class="text-muted small mb-3">@doctor.Department</p>
+                                    
+                                    <div class="doctor-rating mb-3">
+                                        <div class="stars text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                        <small class="text-muted ms-1">(4.8/5)</small>
+                                    </div>
+                                    
+                                    @if (!User.Identity?.IsAuthenticated ?? false)
+                                    {
+                                        <a asp-controller="Account" asp-action="Login" 
+                                           class="btn btn-outline-primary btn-sm w-100">
+                                            <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
+                                        </a>
+                                    }
+                                    else if (!User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                                    {
+                                        <a asp-controller="Randevu" asp-action="Create" 
+                                           class="btn btn-primary btn-sm w-100">
+                                            <i class="bi bi-calendar-plus me-1"></i>Randevu Al
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        
+        @if ((doctors?.Count() ?? 0) > 4)
+        {
+            <div class="text-center mt-5">
+                <a asp-controller="Doctor" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-people me-2"></i>Tüm Doktorları Gör (@((doctors?.Count() ?? 0) - 4) daha)
+                </a>
+            </div>
+        }
+    </section>
+
+    <!-- Hakkımızda -->
+    <div id="hakkimizda" class="about-section py-5">
+        <h2 class="text-center mb-5">Hakkımızda</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-heart-pulse-fill text-primary me-3" style="font-size: 2.5rem;"></i>
+                            <h3 class="card-title mb-0">Misyonumuz</h3>
+                        </div>
+                        <p class="card-text">
+                            Hasta odaklı yaklaşım, kaliteli sağlık hizmeti ve modern tıbbi teknoloji ile 
+                            toplumun sağlık ihtiyaçlarını en üst düzeyde karşılamak, sürdürülebilir ve 
+                            erişilebilir sağlık hizmeti sunmak.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>7/24 Kesintisiz Hizmet</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Uzman Hekim Kadrosu</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Modern Tıbbi Cihazlar</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Hasta Odaklı Yaklaşım</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-eye-fill text-primary me-3" style="font-size: 2.5rem;"></i>
+                            <h3 class="card-title mb-0">Vizyonumuz</h3>
+                        </div>
+                        <p class="card-text">
+                            Sağlık hizmetlerinde öncü, yenilikçi yaklaşımlarla örnek gösterilen, 
+                            hasta ve çalışan memnuniyetini en üst düzeyde tutan, 
+                            bölgemizin güvenilir sağlık merkezi olmak.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Sürekli Gelişim</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Yenilikçi Tedavi Yöntemleri</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Hasta Memnuniyeti</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Kalite Standartları</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-building text-primary me-3" style="font-size: 2.5rem;"></i>
+                            <h3 class="card-title mb-0">Hastanemiz</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="card-text">
+                                    Modern tıbbi teknoloji ve uzman kadromuzla 1995 yılından bu yana Sincan ve çevresine hizmet vermekteyiz. 
+                                    Hastanemiz bünyesinde:
+                                </p>
+                                <ul class="list-unstyled mt-3">
+                                    <li class="mb-2"><i class="bi bi-building-fill-check text-primary me-2"></i>15 Farklı Branşta Poliklinik</li>
+                                    <li class="mb-2"><i class="bi bi-laptop text-primary me-2"></i>Modern Görüntüleme Merkezi</li>
+                                    <li class="mb-2"><i class="bi bi-heart-pulse text-primary me-2"></i>Tam Donanımlı Ameliyathane</li>
+                                    <li class="mb-2"><i class="bi bi-droplet-half text-primary me-2"></i>Gelişmiş Laboratuvar</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-text">
+                                    Değerlerimiz:
+                                </p>
+                                <ul class="list-unstyled mt-3">
+                                    <li class="mb-2"><i class="bi bi-shield-check text-success me-2"></i>Güvenilirlik ve Şeffaflık</li>
+                                    <li class="mb-2"><i class="bi bi-heart text-success me-2"></i>İnsan Odaklı Yaklaşım</li>
+                                    <li class="mb-2"><i class="bi bi-graph-up-arrow text-success me-2"></i>Sürekli Gelişim</li>
+                                    <li class="mb-2"><i class="bi bi-people text-success me-2"></i>Ekip Çalışması</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- İletişim -->
+    <div id="iletisim" class="contact-section py-5">
+        <h2 class="text-center mb-5">İletişim</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-geo-alt-fill text-primary me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h5 class="mb-1">Adres</h5>
+                                <p class="mb-0">Ankara/Sincan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-telephone-fill text-primary me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h5 class="mb-1">Telefon</h5>
+                                <p class="mb-0">0536 715 12 92</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-envelope-fill text-primary me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h5 class="mb-1">E-posta</h5>
+                                <p class="mb-0">mevlut201mevlut@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        <div class="ratio ratio-4x3">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3058.1234567890!2d32.5812345!3d39.9812345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDU4JzU2LjQiTiAzMsKwMzQnNTIuNCJF!5e0!3m2!1str!2str!4v1234567890"
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            offset: 100,
+            once: true,
+            easing: 'ease-in-out'
+        });
+
+        // Show all departments function
+        function showAllDepartments() {
+            // Implementation for showing all departments
+            window.location.href = '@Url.Action("Index", "Department")';
+        }
+
+        // Loading animation for cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.department-card, .doctor-card, .feature-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Statistics counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const increment = target / 200;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    counter.textContent = Math.floor(current);
+                    
+                    if (current >= target) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    }
+                }, 10);
+            });
+        }
+
+        // Trigger counter animation when in viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.feature-stats').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Hover effects for cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
+            });
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero-background');
+            if (parallax) {
+                const speed = scrolled * 0.5;
+                parallax.style.transform = 'translateY(' + speed + 'px)';
+            }
+        });
+
+        // Dynamic typing effect
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect for hero title
+        const heroTitle = document.querySelector('.hero-section h1');
+        if (heroTitle) {
+            const originalText = heroTitle.textContent;
+            setTimeout(() => {
+                typeWriter(heroTitle, originalText, 80);
+            }, 1000);
+        }
+
+        // Lazy loading for images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Add loading state to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.href && !this.href.includes('#')) {
+                    this.innerHTML = '<i class="bi bi-arrow-repeat spinner"></i> Yükleniyor...';
+                    this.disabled = true;
+                }
+            });
+        });
+
+        // Real-time clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('tr-TR');
+            const clockElement = document.getElementById('live-clock');
+            if (clockElement) {
+                clockElement.textContent = timeString;
+            }
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call
+
+        // Search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    if (query.length > 2) {
+                        // Implement search logic here
+                        showSearchResults(query);
+                    } else {
+                        hideSearchResults();
+                    }
+                });
+            }
+        }
+
+        function showSearchResults(query) {
+            // Implementation for showing search results
+            console.log('Searching for:', query);
+        }
+
+        function hideSearchResults() {
+            const searchResults = document.getElementById('search-results');
+            if (searchResults) {
+                searchResults.style.display = 'none';
+            }
+        }
+
+        // Initialize search on page load
+        initializeSearch();
+    </script>
+}
+
+@section Styles {
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .lazy {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .lazy.loaded {
+            opacity: 1;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .hero-background {
+            will-change: transform;
+        }
+        
+        #live-clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        #search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+}

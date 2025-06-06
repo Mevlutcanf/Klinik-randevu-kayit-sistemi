@@ -1,0 +1,122 @@
+@model IEnumerable<randevu_kayit.Models.Randevu>
+@using randevu_kayit.Models
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<div class="container-fluid py-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h5 class="mb-0">@ViewData["Title"]</h5>
+                </div>
+                <div class="col-auto">
+                    <div class="btn-group">
+                        <a href="@Url.Action("Appointments", new { status = "" })" 
+                           class="btn btn-outline-primary @(ViewBag.Status == null ? "active" : "")">
+                            Tümü
+                        </a>
+                        <a href="@Url.Action("Appointments", new { status = "Aktif" })" 
+                           class="btn btn-outline-primary @(ViewBag.Status == "Aktif" ? "active" : "")">
+                            Aktif
+                        </a>
+                        <a href="@Url.Action("Appointments", new { status = "Tamamlandi" })" 
+                           class="btn btn-outline-primary @(ViewBag.Status == "Tamamlandi" ? "active" : "")">
+                            Tamamlanan
+                        </a>
+                        <a href="@Url.Action("Appointments", new { status = "Iptal" })" 
+                           class="btn btn-outline-primary @(ViewBag.Status == "Iptal" ? "active" : "")">
+                            İptal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                    <thead>
+                        <tr>
+                            <th>Tarih/Saat</th>
+                            <th>Hasta</th>
+                            <th>Şikayet</th>
+                            <th>Durum</th>
+                            <th>Not</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var randevu in Model)
+                        {
+                            <tr>
+                                <td>@randevu.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <div class="d-flex px-3 py-1">
+                                        <div>
+                                            <i class="bi bi-person text-muted me-3"></i>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">@(randevu.Hasta?.AdSoyad ?? "-")</h6>
+                                            <p class="text-xs text-secondary mb-0">@(randevu.Hasta?.Email ?? "-")</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@randevu.Sikayet</td>
+                                <td>
+                                    <span class="badge bg-@(randevu.Durum == RandevuDurumu.Aktif ? "success" : 
+                                                         randevu.Durum == RandevuDurumu.Tamamlandi ? "info" : "secondary")">
+                                        @randevu.Durum
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">@(string.IsNullOrEmpty(randevu.DoktorNotu) ? "-" : randevu.DoktorNotu)</small>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-action="AppointmentDetails" asp-route-id="@randevu.Id" class="btn btn-sm btn-info">
+                                            <i class="bi bi-pencil-square"></i> Detay
+                                        </a>
+                                        @if (randevu.Durum == RandevuDurumu.Aktif)
+                                        {
+                                            <form asp-action="UpdateAppointmentStatus" method="post" style="display: inline;">
+                                                <input type="hidden" name="id" value="@randevu.Id" />
+                                                <input type="hidden" name="status" value="@RandevuDurumu.Tamamlandi" />
+                                                <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Randevuyu tamamlandı olarak işaretlemek istediğinizden emin misiniz?')">
+                                                    <i class="bi bi-check-circle"></i> Tamamla
+                                                </button>
+                                            </form>
+                                            <form asp-action="UpdateAppointmentStatus" method="post" style="display: inline;">
+                                                <input type="hidden" name="id" value="@randevu.Id" />
+                                                <input type="hidden" name="status" value="@RandevuDurumu.Iptal" />
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?')">
+                                                    <i class="bi bi-x-circle"></i> İptal
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table > :not(caption) > * > * {
+            padding: 1rem 1rem;
+        }
+        
+        .btn-group .btn {
+            margin: 0 2px;
+        }
+        
+        .badge {
+            font-size: 0.875em;
+        }
+    </style>
+} 

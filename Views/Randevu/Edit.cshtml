@@ -1,0 +1,133 @@
+@model randevu_kayit.Models.Randevu
+
+@{
+    ViewData["Title"] = "Randevu Düzenle";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-gradient-primary">
+                    <h5 class="text-white mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        @ViewData["Title"]
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="HastaId" />
+                        <input type="hidden" asp-for="DoktorId" />
+                        <input type="hidden" asp-for="RandevuTarihi" />
+                        <input type="hidden" asp-for="OlusturmaTarihi" />
+
+                        <!-- Randevu Bilgileri -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Randevu Bilgileri
+                            </h6>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" value="@Model.Hasta?.AdSoyad" readonly />
+                                        <label>Hasta Adı</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" value="@Model.Doktor?.AdSoyad" readonly />
+                                        <label>Doktor</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" value="@Model.RandevuTarihi.ToString("dd/MM/yyyy")" readonly />
+                                        <label>Randevu Tarihi</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" value="@Model.RandevuTarihi.ToString("HH:mm")" readonly />
+                                        <label>Randevu Saati</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <textarea class="form-control" style="height: 100px" readonly>@Model.Sikayet</textarea>
+                                    <label>Hasta Şikayeti</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doktor İşlemleri -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="bi bi-stethoscope me-2"></i>
+                                Doktor İşlemleri
+                            </h6>
+                            
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <textarea asp-for="DoktorNotu" class="form-control" style="height: 120px" placeholder="Doktor notlarını buraya yazın..."></textarea>
+                                    <label asp-for="DoktorNotu">Doktor Notu</label>
+                                    <span asp-validation-for="DoktorNotu" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <select asp-for="Durum" class="form-select" asp-items="Html.GetEnumSelectList<RandevuDurumu>()">
+                                    </select>
+                                    <label asp-for="Durum">Randevu Durumu</label>
+                                    <span asp-validation-for="Durum" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sistem Bilgileri -->
+                        <div class="mb-4">
+                            <h6 class="text-secondary mb-3">
+                                <i class="bi bi-clock-history me-2"></i>
+                                Sistem Bilgileri
+                            </h6>
+                            
+                            <div class="form-floating">
+                                <input type="text" class="form-control" value="@Model.OlusturmaTarihi.ToString("dd/MM/yyyy HH:mm")" readonly />
+                                <label>Oluşturma Tarihi</label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                Listeye Dön
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/randevu-create-modern.css" />
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Main Circle -->
+    <circle cx="100" cy="100" r="90" fill="#0D6EFD" opacity="0.1"/>
+    
+    <!-- Cross Symbol -->
+    <path d="M85 60H115V85H140V115H115V140H85V115H60V85H85V60Z" fill="#0D6EFD"/>
+    
+    <!-- Circular Border -->
+    <circle cx="100" cy="100" r="88" stroke="#0D6EFD" stroke-width="4" fill="none"/>
+    
+    <!-- Pulse Line -->
+    <path d="M30 100 H60 L70 80 L80 120 L90 90 L100 110 L110 70 L120 130 L130 85 L140 100 H170" 
+          stroke="#0D6EFD" stroke-width="4" fill="none"/>
+</svg> 

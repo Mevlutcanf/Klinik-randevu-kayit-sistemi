@@ -1,0 +1,545 @@
+@model QuickAppointment
+
+@{
+    ViewData["Title"] = "Hızlı Randevu";
+}
+
+<link rel="stylesheet" href="~/css/quick-appointment.css" />
+
+<!-- Modern Hero Section -->
+<div class="quick-appointment-hero position-relative overflow-hidden">
+    <div class="hero-pattern"></div>
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold text-white mb-3 animate-fade-in">
+                    <i class="bi bi-lightning-charge me-3"></i>@ViewData["Title"]
+                </h1>
+                <p class="lead text-white-50 mb-4 animate-fade-in-delay">
+                    Hızlı ve kolay randevu alma sistemi ile sağlığınızı öncelikle ele alın. 
+                    Sadece birkaç adımda randevunuzu oluşturun.
+                </p>
+                <div class="quick-features d-flex gap-4 mb-4">
+                    <div class="feature-item">
+                        <i class="bi bi-clock-history"></i>
+                        <span>2 Dakikada</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Güvenli</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-telephone"></i>
+                        <span>Anında Onay</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-illustration">
+                    <div class="floating-elements">
+                        <div class="floating-element element-1">
+                            <i class="bi bi-calendar-heart"></i>
+                        </div>
+                        <div class="floating-element element-2">
+                            <i class="bi bi-stethoscope"></i>
+                        </div>
+                        <div class="floating-element element-3">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Progress Steps -->
+            <div class="appointment-progress-bar mb-5">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <span>Kişisel Bilgiler</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">
+                        <i class="bi bi-hospital"></i>
+                    </div>
+                    <span>Bölüm & Doktor</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <span>Tarih & Saat</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-circle">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <span>Onay</span>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="appointment-form-card shadow-lg">
+                <div class="card-header-gradient">
+                    <h3 class="text-white mb-0">
+                        <i class="bi bi-clipboard-pulse me-2"></i>
+                        Randevu Bilgileri
+                    </h3>
+                    <p class="text-white-50 mb-0">Lütfen tüm alanları eksiksiz doldurunuz</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="quickAppointmentForm" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible" role="alert"></div>
+
+                        <!-- Personal Information Section -->
+                        <div class="form-section" id="section1">
+                            <h5 class="section-title">
+                                <i class="bi bi-person-circle me-2"></i>
+                                Kişisel Bilgileriniz
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input asp-for="AdSoyad" class="form-control" placeholder="Ad Soyad" required />
+                                        <label asp-for="AdSoyad">Ad Soyad</label>
+                                        <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input asp-for="TCKimlikNo" class="form-control" placeholder="TC Kimlik No" 
+                                               required maxlength="11" minlength="11" pattern="[0-9]{11}" />
+                                        <label asp-for="TCKimlikNo">TC Kimlik No</label>
+                                        <span asp-validation-for="TCKimlikNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input asp-for="Telefon" class="form-control" placeholder="Telefon" 
+                                               required pattern="[0-9]{10,11}" />
+                                        <label asp-for="Telefon">Telefon Numarası</label>
+                                        <span asp-validation-for="Telefon" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Department & Doctor Section -->
+                        <div class="form-section" id="section2">
+                            <h5 class="section-title">
+                                <i class="bi bi-building me-2"></i>
+                                Bölüm ve Doktor Seçimi
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <select id="DepartmentId" class="form-select" required>
+                                            <option value="">Seçiniz...</option>
+                                            @foreach (var dept in ViewBag.Departments)
+                                            {
+                                                <option value="@dept.Id">@dept.Name</option>
+                                            }
+                                        </select>
+                                        <label for="DepartmentId">Bölüm</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <select asp-for="DoktorId" class="form-select" required disabled>
+                                            <option value="">Önce bölüm seçiniz...</option>
+                                        </select>
+                                        <label asp-for="DoktorId">Doktor</label>
+                                        <span asp-validation-for="DoktorId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date & Time Section -->
+                        <div class="form-section" id="section3">
+                            <h5 class="section-title">
+                                <i class="bi bi-calendar-week me-2"></i>
+                                Tarih ve Saat Seçimi
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <div class="form-floating">
+                                        <input asp-for="TarihSaat" type="datetime-local" class="form-control" 
+                                               required min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                                        <label asp-for="TarihSaat">Randevu Tarihi ve Saati</label>
+                                        <span asp-validation-for="TarihSaat" class="text-danger"></span>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Mesai saatleri: 09:00 - 17:00 (Hafta sonları kapalı)
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Complaint Section -->
+                        <div class="form-section" id="section4">
+                            <h5 class="section-title">
+                                <i class="bi bi-chat-left-text me-2"></i>
+                                Şikayet ve Açıklama
+                            </h5>
+                            <div class="mb-4">
+                                <div class="form-floating">
+                                    <textarea asp-for="Sikayet" class="form-control" placeholder="Şikayetinizi açıklayınız..." 
+                                              style="height: 120px" required></textarea>
+                                    <label asp-for="Sikayet">Şikayet/Açıklama</label>
+                                    <span asp-validation-for="Sikayet" class="text-danger"></span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-lightbulb me-1"></i>
+                                    Detaylı açıklama doktorunuzun size daha iyi hizmet vermesine yardımcı olur.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Submit Section -->
+                        <div class="form-actions">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-arrow-left me-2"></i>Ana Sayfa
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                    <i class="bi bi-send me-2"></i>Randevu Oluştur
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-3">
+                    <div class="info-card text-center">
+                        <div class="info-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+                        <h6>Anında Onay</h6>
+                        <p class="text-muted">Randevunuz hemen onaylanır ve size bilgi verilir.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="info-card text-center">
+                        <div class="info-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h6>Güvenli İşlem</h6>
+                        <p class="text-muted">Tüm bilgileriniz güvenli şekilde korunmaktadır.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="info-card text-center">
+                        <div class="info-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h6>Hızlı İşlem</h6>
+                        <p class="text-muted">Sadece 2 dakikada randevunuzu oluşturun.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        $(document).ready(function () {
+            let currentStep = 1;
+            const totalSteps = 4;
+            
+            // Initialize form validation
+            initializeFormValidation();
+            
+            // Initialize step navigation
+            updateProgressSteps();
+            
+            // Department change handler
+            $('#DepartmentId').change(function () {
+                var departmentId = $(this).val();
+                var doctorSelect = $('#DoktorId');
+                
+                doctorSelect.prop('disabled', true);
+                doctorSelect.html('<option value="">Yükleniyor...</option>');
+                
+                if (departmentId) {
+                    updateProgressSteps(2);
+                    
+                    $.get('/QuickAppointment/GetDoctorsByDepartment/' + departmentId, function (data) {
+                        doctorSelect.html('<option value="">Doktor Seçiniz</option>');
+                        $.each(data, function (i, doctor) {
+                            doctorSelect.append($('<option></option>')
+                                .val(doctor.id)
+                                .text(doctor.adSoyad + ' - ' + (doctor.uzmanlik || 'Uzman Doktor')));
+                        });
+                        doctorSelect.prop('disabled', false);
+                    }).fail(function() {
+                        doctorSelect.html('<option value="">Doktor bulunamadı</option>');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata!',
+                            text: 'Doktorlar yüklenirken bir hata oluştu.',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    });
+                } else {
+                    doctorSelect.html('<option value="">Önce Bölüm Seçiniz</option>');
+                    updateProgressSteps(1);
+                }
+            });
+            
+            // Doctor change handler
+            $('#DoktorId').change(function() {
+                if ($(this).val()) {
+                    updateProgressSteps(3);
+                }
+            });
+            
+            // Date change handler
+            $('#TarihSaat').change(function() {
+                if ($(this).val()) {
+                    validateDateTime($(this).val());
+                    updateProgressSteps(4);
+                }
+            });
+            
+            // Form submission
+            $('#quickAppointmentForm').submit(function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    submitForm();
+                }
+            });
+            
+            // Real-time validation
+            $('input, select, textarea').on('input change', function() {
+                validateField($(this));
+                updateSubmitButton();
+            });
+            
+            function initializeFormValidation() {
+                // Add custom validation styles
+                $('input, select, textarea').on('blur', function() {
+                    validateField($(this));
+                });
+            }
+            
+            function validateField(field) {
+                const value = field.val();
+                const fieldName = field.attr('name') || field.attr('id');
+                let isValid = true;
+                let errorMessage = '';
+                
+                // Remove existing validation styles
+                field.removeClass('is-valid is-invalid');
+                field.siblings('.invalid-feedback').remove();
+                
+                if (field.prop('required') && !value) {
+                    isValid = false;
+                    errorMessage = 'Bu alan zorunludur.';
+                } else if (fieldName === 'TCKimlikNo' && value) {
+                    if (!/^[0-9]{11}$/.test(value)) {
+                        isValid = false;
+                        errorMessage = 'TC Kimlik No 11 haneli sayı olmalıdır.';
+                    }
+                } else if (fieldName === 'Telefon' && value) {
+                    if (!/^[0-9]{10,11}$/.test(value.replace(/\s/g, ''))) {
+                        isValid = false;
+                        errorMessage = 'Geçerli bir telefon numarası giriniz.';
+                    }
+                } else if (fieldName === 'TarihSaat' && value) {
+                    const selectedDate = new Date(value);
+                    const now = new Date();
+                    const dayOfWeek = selectedDate.getDay();
+                    const hour = selectedDate.getHours();
+                    
+                    if (selectedDate <= now) {
+                        isValid = false;
+                        errorMessage = 'Geçmiş bir tarih seçemezsiniz.';
+                    } else if (dayOfWeek === 0 || dayOfWeek === 6) {
+                        isValid = false;
+                        errorMessage = 'Hafta sonu randevu alınamaz.';
+                    } else if (hour < 9 || hour >= 17) {
+                        isValid = false;
+                        errorMessage = 'Mesai saatleri: 09:00 - 17:00';
+                    }
+                }
+                
+                if (isValid && value) {
+                    field.addClass('is-valid');
+                } else if (!isValid) {
+                    field.addClass('is-invalid');
+                    field.after(`<div class="invalid-feedback">${errorMessage}</div>`);
+                }
+                
+                return isValid;
+            }
+            
+            function validateDateTime(dateTimeValue) {
+                const selectedDate = new Date(dateTimeValue);
+                const now = new Date();
+                const dayOfWeek = selectedDate.getDay();
+                const hour = selectedDate.getHours();
+                
+                if (selectedDate <= now) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Geçersiz Tarih',
+                        text: 'Geçmiş bir tarih seçemezsiniz.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    return false;
+                }
+                
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Hafta Sonu',
+                        text: 'Hafta sonu randevu alınamaz.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    return false;
+                }
+                
+                if (hour < 9 || hour >= 17) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Mesai Saatleri',
+                        text: 'Randevular sadece 09:00 - 17:00 arasında alınabilir.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            function validateForm() {
+                let isValid = true;
+                const requiredFields = $('input[required], select[required], textarea[required]');
+                
+                requiredFields.each(function() {
+                    if (!validateField($(this))) {
+                        isValid = false;
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            function updateProgressSteps(step = currentStep) {
+                currentStep = step;
+                
+                $('.progress-step').removeClass('active completed');
+                
+                for (let i = 1; i <= totalSteps; i++) {
+                    const stepElement = $(`.progress-step[data-step="${i}"]`);
+                    if (i < currentStep) {
+                        stepElement.addClass('completed');
+                    } else if (i === currentStep) {
+                        stepElement.addClass('active');
+                    }
+                }
+            }
+            
+            function updateSubmitButton() {
+                const allValid = $('input[required], select[required], textarea[required]').toArray().every(field => {
+                    return $(field).hasClass('is-valid') || $(field).val() !== '';
+                });
+                
+                $('#submitBtn').prop('disabled', !allValid);
+            }
+            
+            function submitForm() {
+                // Show loading
+                Swal.fire({
+                    title: 'Randevu Oluşturuluyor...',
+                    text: 'Lütfen bekleyiniz.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Submit the form
+                const formData = new FormData($('#quickAppointmentForm')[0]);
+                
+                $.ajax({
+                    url: $('#quickAppointmentForm').attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Başarılı!',
+                            text: 'Randevunuz başarıyla oluşturuldu. En kısa sürede size dönüş yapılacaktır.',
+                            confirmButtonText: 'Tamam'
+                        }).then(() => {
+                            window.location.href = '/QuickAppointment/Confirmation';
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata!',
+                            text: 'Randevu oluşturulurken bir hata oluştu. Lütfen tekrar deneyiniz.',
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                });
+            }
+            
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+            
+            // Animate form sections
+            $('.form-section').each(function(index) {
+                $(this).css({
+                    'opacity': '0',
+                    'transform': 'translateY(20px)'
+                });
+                
+                setTimeout(() => {
+                    $(this).animate({
+                        'opacity': 1
+                    }, 500).css({
+                        'transform': 'translateY(0)'
+                    });
+                }, index * 200);
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+}

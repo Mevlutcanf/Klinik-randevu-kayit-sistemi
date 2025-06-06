@@ -1,0 +1,254 @@
+@using randevu_kayit.Models
+@model IEnumerable<randevu_kayit.Models.Randevu>
+@{
+    ViewData["Title"] = "Randevu Yönetimi";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="modern-table fade-in">
+            <div class="admin-card-header">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div>
+                        <h6 class="mb-1">@ViewData["Title"]</h6>
+                        <small class="opacity-75">Randevuları yönetin ve takip edin</small>
+                    </div>
+                    <div class="badge bg-light text-dark">
+                        <i class="bi bi-calendar2-week me-1"></i>
+                        @Model.Count() Randevu
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modern Filter Section -->
+            <div class="search-filter-section">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="modern-form-label">Başlangıç Tarihi</label>
+                        <input type="date" name="startDate" class="modern-form-control" 
+                               value="@ViewBag.StartDate?.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="modern-form-label">Bitiş Tarihi</label>
+                        <input type="date" name="endDate" class="modern-form-control" 
+                               value="@ViewBag.EndDate?.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="modern-form-label">Durum</label>
+                        <select name="status" class="modern-form-control">
+                            <option value="">Tüm Durumlar</option>
+                            <option value="Aktif" selected="@(ViewBag.Status == "Aktif")">Aktif</option>
+                            <option value="Tamamlandi" selected="@(ViewBag.Status == "Tamamlandi")">Tamamlandı</option>
+                            <option value="Iptal" selected="@(ViewBag.Status == "Iptal")">İptal</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="modern-form-label">Doktor</label>
+                        <select name="doctorId" class="modern-form-control">
+                            <option value="">Tüm Doktorlar</option>
+                            @foreach (var doctor in ViewBag.Doctors)
+                            {
+                                <option value="@doctor.Id" selected="@(ViewBag.DoctorId == doctor.Id)">
+                                    @doctor.AdSoyad
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="modern-btn primary w-100">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-calendar-event me-2"></i>Tarih/Saat</th>
+                            <th><i class="bi bi-person me-2"></i>Hasta</th>
+                            <th><i class="bi bi-person-badge me-2"></i>Doktor</th>
+                            <th><i class="bi bi-chat-text me-2"></i>Şikayet</th>
+                            <th><i class="bi bi-check-circle me-2"></i>Durum</th>
+                            <th><i class="bi bi-sticky me-2"></i>Not</th>
+                            <th><i class="bi bi-gear me-2"></i>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var randevu in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon info me-3" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-calendar-date" style="font-size: 1rem;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@randevu.RandevuTarihi.ToString("dd.MM.yyyy")</div>
+                                            <small class="text-muted">@randevu.RandevuTarihi.ToString("HH:mm")</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon success me-3" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person" style="font-size: 1rem;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@(randevu.Hasta?.AdSoyad ?? "Hasta bilgisi yok")</div>
+                                            <small class="text-muted">@randevu.Hasta?.Email</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon primary me-3" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person-badge" style="font-size: 1rem;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@(randevu.Doktor?.AdSoyad ?? "Doktor bilgisi yok")</div>
+                                            <small class="text-muted">@(randevu.Doktor?.Department?.Name ?? "-")</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 150px;" title="@(randevu.Sikayet ?? "-")">
+                                        @(randevu.Sikayet ?? "-")
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="modern-badge @(randevu.Durum == RandevuDurumu.Aktif ? "success" : 
+                                                         randevu.Durum == RandevuDurumu.Tamamlandi ? "info" : "danger")">
+                                        <i class="bi bi-@(randevu.Durum == RandevuDurumu.Aktif ? "check-circle" : 
+                                                         randevu.Durum == RandevuDurumu.Tamamlandi ? "info-circle" : "x-circle") me-1"></i>
+                                        @randevu.Durum
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 120px;" title="@(string.IsNullOrEmpty(randevu.DoktorNotu) ? "Not bulunmuyor" : randevu.DoktorNotu)">
+                                        @(string.IsNullOrEmpty(randevu.DoktorNotu) ? "-" : randevu.DoktorNotu)
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="modern-btn outline" 
+                                                data-bs-toggle="modal" data-bs-target="#noteModal"
+                                                data-appointment-id="@randevu.Id"
+                                                data-current-note="@randevu.DoktorNotu"
+                                                title="Not Düzenle">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        @if (randevu.Durum == RandevuDurumu.Aktif)
+                                        {
+                                            <form asp-action="UpdateAppointmentStatus" method="post" style="display: inline;">
+                                                <input type="hidden" name="id" value="@randevu.Id" />
+                                                <input type="hidden" name="status" value="Tamamlandi" />
+                                                <button type="submit" class="modern-btn success" title="Tamamlandı olarak işaretle">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+                                            </form>
+                                            <form asp-action="UpdateAppointmentStatus" method="post" style="display: inline;">
+                                                <input type="hidden" name="id" value="@randevu.Id" />
+                                                <input type="hidden" name="status" value="Iptal" />
+                                                <button type="submit" class="modern-btn danger" title="İptal et" 
+                                                        onclick="return confirm('Randevuyu iptal etmek istediğinizden emin misiniz?')">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Note Modal -->
+<div class="modal fade modern-modal" id="noteModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="UpdateAppointmentNote" method="post">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title">
+                            <i class="bi bi-sticky me-2"></i>Randevu Notu
+                        </h5>
+                        <small class="opacity-75">Randevu için özel not ekleyin veya düzenleyin</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" name="id" id="appointmentId">
+                    <div class="modern-form-group">
+                        <label class="modern-form-label">
+                            <i class="bi bi-chat-text me-2"></i>Doktor Notu
+                        </label>
+                        <textarea class="modern-form-control" name="note" id="note" rows="5" 
+                                  placeholder="Randevu ile ilgili önemli notlarınızı buraya yazın..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modern-btn outline" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-2"></i>İptal
+                    </button>
+                    <button type="submit" class="modern-btn primary">
+                        <i class="bi bi-check-lg me-2"></i>Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Modern modal handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const noteModal = document.getElementById('noteModal');
+            const appointmentIdInput = document.getElementById('appointmentId');
+            const noteTextarea = document.getElementById('note');
+            
+            if (noteModal) {
+                noteModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const appointmentId = button.getAttribute('data-appointment-id');
+                    const currentNote = button.getAttribute('data-current-note');
+                    
+                    appointmentIdInput.value = appointmentId;
+                    noteTextarea.value = currentNote || '';
+                    noteTextarea.focus();
+                });
+            }
+            
+            // Add fade-in animation to table rows
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach((row, index) => {
+                setTimeout(() => {
+                    row.classList.add('fade-in');
+                }, index * 50);
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .table > :not(caption) > * > * {
+            padding: 1rem 1rem;
+        }
+        
+        .btn-group .btn {
+            margin: 0 2px;
+        }
+        
+        .badge {
+            font-size: 0.875em;
+        }
+    </style>
+} 

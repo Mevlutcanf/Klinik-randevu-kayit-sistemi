@@ -1,0 +1,53 @@
+@model QuickAppointment
+
+@{
+    ViewData["Title"] = "Randevu Onayı";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    <h2 class="card-title mt-3">Randevunuz Alındı!</h2>
+                    <p class="lead">Randevu detaylarınız aşağıdadır:</p>
+
+                    <div class="mt-4">
+                        <div class="row">
+                            <div class="col-md-6 text-md-end fw-bold">Ad Soyad:</div>
+                            <div class="col-md-6 text-md-start">@Model.AdSoyad</div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 text-md-end fw-bold">TC Kimlik No:</div>
+                            <div class="col-md-6 text-md-start">@Model.TCKimlikNo</div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 text-md-end fw-bold">Telefon:</div>
+                            <div class="col-md-6 text-md-start">@Model.Telefon</div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 text-md-end fw-bold">Doktor:</div>
+                            <div class="col-md-6 text-md-start">@Model.Doktor.AdSoyad</div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 text-md-end fw-bold">Randevu Tarihi:</div>
+                            <div class="col-md-6 text-md-start">@Model.TarihSaat.ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-4" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Randevu detaylarınız SMS ve e-posta yoluyla size iletilecektir.
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                            <i class="bi bi-house me-2"></i>Ana Sayfaya Dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Doctor Illustration</title>
+    <g fill="none" fill-rule="evenodd">
+        <!-- Background -->
+        <rect fill="#FFFFFF" x="0" y="0" width="800" height="600"/>
+        
+        <!-- Doctor -->
+        <g transform="translate(200, 100)">
+            <!-- Head -->
+            <circle fill="#FFD3B6" cx="200" cy="100" r="80"/>
+            <path fill="#4A4A4A" d="M160,60 C160,60 180,80 200,80 C220,80 240,60 240,60" stroke="#4A4A4A" stroke-width="3"/>
+            <circle fill="#4A4A4A" cx="170" cy="90" r="5"/>
+            <circle fill="#4A4A4A" cx="230" cy="90" r="5"/>
+            
+            <!-- Hair -->
+            <path fill="#4A4A4A" d="M120,100 C120,40 280,40 280,100"/>
+            
+            <!-- Body -->
+            <rect fill="#FFFFFF" x="140" y="180" width="120" height="200" rx="10"/>
+            <rect fill="#2196F3" x="140" y="180" width="120" height="200" rx="10"/>
+            
+            <!-- Stethoscope -->
+            <path d="M180,200 C180,200 160,220 160,240 C160,260 180,280 200,280" stroke="#000000" stroke-width="3" fill="none"/>
+            <circle fill="#000000" cx="200" cy="280" r="10"/>
+            
+            <!-- Arms -->
+            <path fill="#FFD3B6" d="M140,200 C100,200 80,240 60,280"/>
+            <path fill="#FFD3B6" d="M260,200 C300,200 320,240 340,280"/>
+            
+            <!-- Hands -->
+            <circle fill="#FFD3B6" cx="60" cy="280" r="20"/>
+            <circle fill="#FFD3B6" cx="340" cy="280" r="20"/>
+        </g>
+        
+        <!-- Medical Icons -->
+        <g transform="translate(500, 150)">
+            <circle fill="#FF4081" cx="50" cy="50" r="30"/>
+            <path d="M50,30 L50,70 M30,50 L70,50" stroke="#FFFFFF" stroke-width="4"/>
+        </g>
+        <g transform="translate(100, 400)">
+            <rect fill="#4CAF50" x="0" y="0" width="60" height="60" rx="10"/>
+            <path d="M30,15 L30,45 M15,30 L45,30" stroke="#FFFFFF" stroke-width="4"/>
+        </g>
+    </g>
+</svg> 

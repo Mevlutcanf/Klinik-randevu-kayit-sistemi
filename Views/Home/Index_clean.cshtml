@@ -1,0 +1,439 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<link rel="stylesheet" href="~/css/home-modern.css" />
+
+<!-- Hero Section with Animated Background -->
+<div class="hero-section position-relative overflow-hidden">
+    <div class="hero-background"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+    
+    <div class="container position-relative z-3 text-white text-center py-5">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6 text-lg-start text-center">
+                <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+                    Sağlığınız İçin <span class="text-gradient">Buradayız</span>
+                </h1>
+                <p class="lead mb-4 fs-5 animate-fade-in-delay">
+                    Modern tıbbi teknoloji ve uzman kadromuzla kaliteli sağlık hizmeti sunuyoruz. 
+                    Güvenilir, hızlı ve hasta odaklı yaklaşımımızla yanınızdayız.
+                </p>
+                
+                <div class="hero-stats row g-3 mb-4 text-center animate-slide-up">
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <h3 class="fw-bold mb-1">50+</h3>
+                            <small class="text-white-50">Uzman Doktor</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <h3 class="fw-bold mb-1">1000+</h3>
+                            <small class="text-white-50">Hasta Memnuniyeti</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <h3 class="fw-bold mb-1">24/7</h3>
+                            <small class="text-white-50">Hizmet</small>
+                        </div>
+                    </div>
+                </div>
+                
+                @if (!User.Identity?.IsAuthenticated ?? false)
+                {
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-start animate-bounce-in">
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-person-plus me-2"></i>Hemen Kayıt Ol
+                        </a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-4 py-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Giriş Yap
+                        </a>
+                    </div>
+                }
+                else if (!User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                {
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-start animate-bounce-in">
+                        <a asp-controller="Randevu" asp-action="Create" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-calendar-plus me-2"></i>Randevu Al
+                        </a>
+                        <a asp-controller="QuickAppointment" asp-action="Index" class="btn btn-outline-light btn-lg px-4 py-3">
+                            <i class="bi bi-lightning me-2"></i>Hızlı Randevu
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image-container animate-float">
+                    <div class="hero-card">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-circle bg-primary text-white me-3">
+                                        <i class="bi bi-heart-pulse"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Dr. Ahmet Yılmaz</h6>
+                                        <small class="text-muted">Kardiyolog</small>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-3">Bugün 14:30'da randevunuz var</p>
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-outline-primary btn-sm">Detaylar</button>
+                                    <button class="btn btn-primary btn-sm">Randevu Al</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<section class="stats-section bg-white py-5">
+    <div class="container">
+        <div class="row g-4" data-aos="fade-up">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card text-center">
+                    <div class="stat-icon patients">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <span class="stat-number" data-count="2500">0</span>
+                    <div class="stat-label">Mutlu Hasta</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card text-center">
+                    <div class="stat-icon doctors">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </div>
+                    <span class="stat-number" data-count="50">0</span>
+                    <div class="stat-label">Uzman Doktor</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card text-center">
+                    <div class="stat-icon appointments">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+                    <span class="stat-number" data-count="15000">0</span>
+                    <div class="stat-label">Başarılı Tedavi</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card text-center">
+                    <div class="stat-icon departments">
+                        <i class="bi bi-hospital-fill"></i>
+                    </div>
+                    <span class="stat-number" data-count="15">0</span>
+                    <div class="stat-label">Branş</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <span class="badge bg-primary text-white px-3 py-2 mb-3">Özelliklerimiz</span>
+                <h2 class="display-5 fw-bold mb-3">Neden Bizi Tercih Etmelisiniz?</h2>
+                <p class="lead text-muted">Sağlık hizmetlerinde kalite, güven ve hasta memnuniyeti önceliğimiz</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Uzman Kadro</h3>
+                    <p class="text-muted">Alanında uzman doktorlarımız ve deneyimli sağlık personelimizle en iyi tıbbi hizmeti sunuyoruz.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Kolay Randevu</h3>
+                    <p class="text-muted">Online randevu sistemi ile 7/24 randevu alabilir, randevularınızı kolayca yönetebilirsiniz.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-hospital"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Modern Tesisler</h3>
+                    <p class="text-muted">En son teknoloji ile donatılmış modern tesislerimizde güvenli ve konforlu bir tedavi ortamı sunuyoruz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Departments Section -->
+<section class="departments-section">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <span class="badge bg-primary text-white px-3 py-2 mb-3">Polikliniklerimiz</span>
+                <h2 class="display-5 fw-bold mb-3">Sağlık Hizmetlerimiz</h2>
+                <p class="lead text-muted">15 farklı branşta uzman doktorlarımızla hizmetinizdeyiz</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            @{
+                var departments = ViewBag.Departments ?? new List<Department>
+                {
+                    new Department { Name = "Dahiliye", Description = "İç hastalıkları tanı ve tedavi" },
+                    new Department { Name = "Kardiyoloji", Description = "Kalp ve damar hastalıkları" },
+                    new Department { Name = "Göz Hastalıkları", Description = "Göz muayene ve ameliyatları" },
+                    new Department { Name = "Ortopedi", Description = "Kemik ve eklem hastalıkları" }
+                };
+            }
+            
+            @foreach (var dept in departments.Take(4))
+            {
+                <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="@(departments.ToList().IndexOf(dept) * 100)">
+                    <div class="department-card">
+                        <div class="department-header">
+                            <div class="department-icon">
+                                <i class="bi bi-@(dept.Name.ToLower() switch {
+                                    "dahiliye" => "heart-pulse",
+                                    "kardiyoloji" => "heart",
+                                    "göz hastalıkları" => "eye",
+                                    "ortopedi" => "bandaid",
+                                    _ => "hospital"
+                                })"></i>
+                            </div>
+                            <h4>@dept.Name</h4>
+                        </div>
+                        <div class="department-body">
+                            <p>@(dept.Description ?? "Uzman doktorlarımızla hizmetinizdeyiz")</p>
+                            
+                            @if (User.Identity?.IsAuthenticated ?? false && !User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Randevu" asp-action="Create" 
+                                   asp-route-departmentId="@dept.Id" 
+                                   class="btn btn-department">
+                                    <i class="bi bi-calendar-plus me-1"></i>Randevu Al
+                                </a>
+                            }
+                            else if (!User.Identity?.IsAuthenticated ?? false)
+                            {
+                                <a asp-controller="Account" asp-action="Login" 
+                                   class="btn btn-department">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Doctors Section -->
+<section class="doctors-section">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <span class="badge bg-primary text-white px-3 py-2 mb-3">Ekibimiz</span>
+                <h2 class="display-5 fw-bold mb-3">Uzman Doktorlarımız</h2>
+                <p class="lead text-muted">Alanında uzman, deneyimli doktorlarımızla sağlığınızı güvence altına alıyoruz</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            @{
+                var doctors = ViewBag.Doctors ?? new List<ApplicationUser>();
+                var featuredDoctors = doctors.Take(3);
+            }
+            
+            @if (featuredDoctors.Any())
+            {
+                @foreach (var doctor in featuredDoctors)
+                {
+                    <div class="col-lg-4 col-md-6" data-aos="flip-up" data-aos-delay="@(featuredDoctors.ToList().IndexOf(doctor) * 150)">
+                        <div class="doctor-card">
+                            <div class="doctor-photo">
+                                @if (!string.IsNullOrEmpty(doctor.ProfilePhotoPath))
+                                {
+                                    <img src="@doctor.ProfilePhotoPath" alt="Dr. @doctor.AdSoyad" />
+                                }
+                                else
+                                {
+                                    <div class="doctor-placeholder">
+                                        <i class="bi bi-person-circle"></i>
+                                    </div>
+                                }
+                                <div class="doctor-status">Aktif</div>
+                                <div class="doctor-rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                            
+                            <div class="doctor-info">
+                                <h5>Dr. @doctor.AdSoyad</h5>
+                                <p class="doctor-specialty">@(doctor.Uzmanlik ?? "Uzman Doktor")</p>
+                                
+                                @if (User.Identity?.IsAuthenticated ?? false && !User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Randevu" asp-action="Create" 
+                                       asp-route-doctorId="@doctor.Id" 
+                                       class="btn btn-appointment">
+                                        <i class="bi bi-calendar-plus me-1"></i>Randevu Al
+                                    </a>
+                                }
+                                else if (!User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <a asp-controller="Account" asp-action="Login" 
+                                       class="btn btn-appointment">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Sample doctors when no data available -->
+                @for (int i = 0; i < 3; i++)
+                {
+                    var sampleDoctors = new[] { 
+                        new { Name = "Ahmet Yılmaz", Specialty = "Kardiyolog" },
+                        new { Name = "Ayşe Demir", Specialty = "Göz Doktoru" },
+                        new { Name = "Mehmet Kaya", Specialty = "Ortopedist" }
+                    };
+                    var doctor = sampleDoctors[i];
+                    
+                    <div class="col-lg-4 col-md-6" data-aos="flip-up" data-aos-delay="@(i * 150)">
+                        <div class="doctor-card">
+                            <div class="doctor-photo">
+                                <div class="doctor-placeholder">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                                <div class="doctor-status">Aktif</div>
+                                <div class="doctor-rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                            
+                            <div class="doctor-info">
+                                <h5>Dr. @doctor.Name</h5>
+                                <p class="doctor-specialty">@doctor.Specialty</p>
+                                
+                                @if (!User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <a asp-controller="Account" asp-action="Login" 
+                                       class="btn btn-appointment">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
+                                    </a>
+                                }
+                                else if (!User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Randevu" asp-action="Create" 
+                                       class="btn btn-appointment">
+                                        <i class="bi bi-calendar-plus me-1"></i>Randevu Al
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home-modern.css" />
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current) + (target >= 1000 ? '+' : '');
+            }, 20);
+        }
+
+        // Intersection Observer for counter animation
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.getAttribute('data-count'));
+                    if (!isNaN(target)) {
+                        animateCounter(entry.target, target);
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        });
+
+        statNumbers.forEach(stat => observer.observe(stat));
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+}

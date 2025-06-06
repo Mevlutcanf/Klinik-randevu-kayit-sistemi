@@ -1,0 +1,203 @@
+@model randevu_kayit.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Doktor Düzenle";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="modern-table fade-in">
+                    <div class="admin-card-header">
+                        <div class="d-flex align-items-center justify-content-between w-100">
+                            <div>
+                                <h6 class="mb-1">
+                                    <i class="bi bi-pencil-square text-primary me-2"></i>
+                                    @ViewData["Title"]
+                                </h6>
+                                <small class="opacity-75">@Model.AdSoyad - Doktor bilgilerini güncelleyin</small>
+                            </div>
+                            <div>
+                                <a asp-action="Doctors" class="modern-btn outline">
+                                    <i class="bi bi-arrow-left me-2"></i>Doktor Listesi
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">                        <form asp-action="EditDoctor" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Id" />
+                            <div asp-validation-summary="ModelOnly" class="modern-alert danger mb-4" role="alert"></div>
+
+                            <!-- Profil Fotoğrafı Bölümü -->
+                            <div class="form-section mb-5">
+                                <div class="section-header">
+                                    <h6 class="section-title">
+                                        <i class="bi bi-camera text-primary me-2"></i>
+                                        Profil Fotoğrafı
+                                    </h6>
+                                </div>
+                                <div class="text-center">
+                                    @if (!string.IsNullOrEmpty(Model.ProfilePhotoPath))
+                                    {
+                                        <img src="@Model.ProfilePhotoPath" alt="@Model.AdSoyad" class="rounded-circle mb-3 border border-3 border-light shadow" style="width: 150px; height: 150px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div class="rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center mx-auto mb-3 shadow" style="width: 150px; height: 150px;">
+                                            <i class="bi bi-person text-white" style="font-size: 4rem;"></i>
+                                        </div>
+                                    }
+                                    <div class="mb-3">
+                                        <label class="modern-form-label">Yeni Profil Fotoğrafı</label>
+                                        <input type="file" name="profilePhoto" class="modern-form-control" accept="image/*" />
+                                        <small class="text-muted">Yeni bir fotoğraf yüklemezseniz mevcut fotoğraf korunacaktır.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kişisel Bilgiler -->
+                            <div class="form-section mb-5">
+                                <div class="section-header">
+                                    <h6 class="section-title">
+                                        <i class="bi bi-person text-success me-2"></i>
+                                        Kişisel Bilgiler
+                                    </h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="AdSoyad" class="modern-form-label"></label>
+                                        <input asp-for="AdSoyad" class="modern-form-control" placeholder="Doktorun adı ve soyadı" />
+                                        <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Email" class="modern-form-label"></label>
+                                        <input asp-for="Email" class="modern-form-control" placeholder="E-posta adresi" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="PhoneNumber" class="modern-form-label">Telefon</label>
+                                        <input asp-for="PhoneNumber" class="modern-form-control" placeholder="Telefon numarası" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="DepartmentId" class="modern-form-label">Bölüm</label>
+                                        <select asp-for="DepartmentId" class="modern-form-control" asp-items="ViewBag.Departments">
+                                            <option value="">Bölüm seçiniz</option>
+                                        </select>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mesleki Bilgiler -->
+                            <div class="form-section mb-5">
+                                <div class="section-header">
+                                    <h6 class="section-title">
+                                        <i class="bi bi-briefcase text-info me-2"></i>
+                                        Mesleki Bilgiler
+                                    </h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Uzmanlik" class="modern-form-label"></label>
+                                        <input asp-for="Uzmanlik" class="modern-form-control" placeholder="Uzmanlık alanı" />
+                                        <span asp-validation-for="Uzmanlik" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CalismaSaatleri" class="modern-form-label"></label>
+                                        <input asp-for="CalismaSaatleri" class="modern-form-control" placeholder="Örn: 08:00-17:00" />
+                                        <span asp-validation-for="CalismaSaatleri" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="DeneyimYili" class="modern-form-label"></label>
+                                        <input asp-for="DeneyimYili" class="modern-form-control" placeholder="Deneyim yılı" type="number" />
+                                        <span asp-validation-for="DeneyimYili" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="DiplomaNo" class="modern-form-label"></label>
+                                        <input asp-for="DiplomaNo" class="modern-form-control" placeholder="Diploma numarası" />
+                                        <span asp-validation-for="DiplomaNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Eğitim Bilgileri -->
+                            <div class="form-section mb-5">
+                                <div class="section-header">
+                                    <h6 class="section-title">
+                                        <i class="bi bi-mortarboard text-warning me-2"></i>
+                                        Eğitim Bilgileri
+                                    </h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="MezunOlduguUniversite" class="modern-form-label"></label>
+                                        <input asp-for="MezunOlduguUniversite" class="modern-form-control" placeholder="Mezun olduğu üniversite" />
+                                        <span asp-validation-for="MezunOlduguUniversite" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="MezuniyetYili" class="modern-form-label"></label>
+                                        <input asp-for="MezuniyetYili" class="modern-form-control" placeholder="Mezuniyet yılı" type="number" />
+                                        <span asp-validation-for="MezuniyetYili" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hakkında -->
+                            <div class="form-section mb-5">
+                                <div class="section-header">
+                                    <h6 class="section-title">
+                                        <i class="bi bi-file-text text-purple me-2"></i>
+                                        Ek Bilgiler
+                                    </h6>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="About" class="modern-form-label"></label>
+                                    <textarea asp-for="About" class="modern-form-control" rows="4" placeholder="Doktor hakkında açıklama yazın..."></textarea>
+                                    <span asp-validation-for="About" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-- Form Butonları -->
+                            <div class="d-flex gap-3 justify-content-end">
+                                <a asp-action="Doctors" class="modern-btn outline">
+                                    <i class="bi bi-x-circle me-2"></i>İptal
+                                </a>
+                                <button type="submit" class="modern-btn primary">
+                                    <i class="bi bi-save me-2"></i>Değişiklikleri Kaydet
+                                </button>
+                            </div>
+                        </form>                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Form animasyonları
+            $('.form-section').addClass('fade-in');
+            
+            // Form validation enhance
+            $('form').on('submit', function() {
+                $('.modern-btn.primary').addClass('loading');
+            });
+            
+            // File input enhance
+            $('input[type="file"]').on('change', function() {
+                const fileName = $(this).val().split('\\').pop();
+                if (fileName) {
+                    $(this).next('.text-muted').text(`Seçilen dosya: ${fileName}`);
+                }
+            });
+        });
+    </script>
+}

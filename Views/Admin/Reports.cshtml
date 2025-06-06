@@ -1,0 +1,672 @@
+@{
+    ViewData["Title"] = "İstatistik Raporları";
+}
+
+<link rel="stylesheet" href="~/css/admin-modern.css" />
+
+<div class="admin-container">
+    <div class="container-fluid py-4">
+        <div class="modern-table fade-in">
+            <div class="admin-card-header">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div>
+                        <h6 class="mb-1">
+                            <i class="bi bi-graph-up text-primary me-2"></i>
+                            @ViewData["Title"]
+                        </h6>
+                        <small class="opacity-75">Sistem istatistiklerini ve performans raporlarını görüntüleyin</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="modern-dropdown">
+                            <button class="modern-btn primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-download me-2"></i>Rapor İndir
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="exportReport('pdf')">
+                                    <i class="bi bi-file-earmark-pdf me-2"></i>PDF Olarak İndir</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportReport('excel')">
+                                    <i class="bi bi-file-earmark-excel me-2"></i>Excel Olarak İndir</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportReport('csv')">
+                                    <i class="bi bi-file-earmark-text me-2"></i>CSV Olarak İndir</a></li>
+                            </ul>
+                        </div>
+                        <button class="modern-btn outline" onclick="refreshReports()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Yenile
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modern İstatistik Kartları -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card primary slide-in-right">
+                        <div class="stats-icon">
+                            <i class="bi bi-calendar-month"></i>
+                        </div>
+                        <div class="stats-content">
+                            <div class="stats-label">Bu Ay Randevu</div>
+                            <div class="stats-number">@(ViewBag.MonthlyAppointments ?? 0)</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                +12% geçen aya göre
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card success slide-in-right" style="animation-delay: 0.1s;">
+                        <div class="stats-icon">
+                            <i class="bi bi-calendar-week"></i>
+                        </div>
+                        <div class="stats-content">
+                            <div class="stats-label">Bu Hafta Randevu</div>
+                            <div class="stats-number">@(ViewBag.WeeklyAppointments ?? 0)</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                +8% geçen haftaya göre
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card info slide-in-right" style="animation-delay: 0.2s;">
+                        <div class="stats-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <div class="stats-content">
+                            <div class="stats-label">Toplam Bölüm</div>
+                            <div class="stats-number">@(ViewBag.TotalDepartments ?? 0)</div>
+                            <div class="stats-trend neutral">
+                                <i class="bi bi-dash"></i>
+                                Değişim yok
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card warning slide-in-right" style="animation-delay: 0.3s;">
+                        <div class="stats-icon">
+                            <i class="bi bi-trophy"></i>
+                        </div>
+                        <div class="stats-content">
+                            <div class="stats-label">Başarı Oranı</div>
+                            <div class="stats-number">95%</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                +2% artış
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafikler Bölümü -->
+            <div class="row mb-4">
+                <div class="col-xl-8 col-lg-7 mb-4">
+                    <div class="chart-container-modern">
+                        <div class="chart-header">
+                            <h6 class="chart-title">
+                                <i class="bi bi-graph-up text-primary me-2"></i>
+                                Aylık Randevu Trendi
+                            </h6>
+                            <div class="modern-dropdown">
+                                <button class="modern-btn-icon outline dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="updateChart('6months')">Son 6 Ay</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="updateChart('1year')">Son 1 Yıl</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="updateChart('2years')">Son 2 Yıl</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-5 mb-4">
+                    <div class="chart-container-modern">
+                        <div class="chart-header">
+                            <h6 class="chart-title">
+                                <i class="bi bi-pie-chart text-info me-2"></i>
+                                Bölüm Dağılımı
+                            </h6>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doktor Performans Tablosu -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="modern-table">
+                        <div class="admin-card-header">
+                            <div>
+                                <h6 class="mb-1">
+                                    <i class="bi bi-trophy text-warning me-2"></i>
+                                    En İyi Doktor Performansı
+                                </h6>
+                                <small class="opacity-75">En yüksek performans gösteren doktorlar</small>
+                            </div>
+                        </div>
+                        <div class="modern-table-wrapper">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th width="60">Sıra</th>
+                                        <th>Doktor Adı</th>
+                                        <th width="120">Toplam Randevu</th>
+                                        <th width="120">Tamamlanan</th>
+                                        <th width="120">Başarı Oranı</th>
+                                        <th width="200">Performans</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="rank-badge gold">1</div>
+                                        </td>
+                                        <td>
+                                            <div class="doctor-info">
+                                                <h6 class="mb-0">Dr. Ali Veli</h6>
+                                                <small class="text-muted">Kardiyoloji</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="modern-badge primary">245</span>
+                                        </td>
+                                        <td>
+                                            <span class="modern-badge success">230</span>
+                                        </td>
+                                        <td>
+                                            <span class="percentage-badge excellent">93.9%</span>
+                                        </td>
+                                        <td>
+                                            <div class="modern-progress">
+                                                <div class="progress-bar excellent" style="width: 94%"></div>
+                                                <span class="progress-text">94%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="rank-badge silver">2</div>
+                                        </td>
+                                        <td>
+                                            <div class="doctor-info">
+                                                <h6 class="mb-0">Dr. Ayşe Fatma</h6>
+                                                <small class="text-muted">Nöroloji</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="modern-badge primary">198</span>
+                                        </td>
+                                        <td>
+                                            <span class="modern-badge success">185</span>
+                                        </td>
+                                        <td>
+                                            <span class="percentage-badge excellent">93.4%</span>
+                                        </td>
+                                        <td>
+                                            <div class="modern-progress">
+                                                <div class="progress-bar excellent" style="width: 93%"></div>
+                                                <span class="progress-text">93%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="rank-badge bronze">3</div>
+                                        </td>
+                                        <td>
+                                            <div class="doctor-info">
+                                                <h6 class="mb-0">Dr. Mehmet Can</h6>
+                                                <small class="text-muted">Ortopedi</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="modern-badge primary">167</span>
+                                        </td>
+                                        <td>
+                                            <span class="modern-badge success">152</span>
+                                        </td>
+                                        <td>
+                                            <span class="percentage-badge good">91.0%</span>
+                                        </td>
+                                        <td>
+                                            <div class="modern-progress">
+                                                <div class="progress-bar good" style="width: 91%"></div>
+                                                <span class="progress-text">91%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Enhanced Monthly Trend Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            
+            // Create gradient for line chart
+            const gradient = monthlyCtx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(79, 70, 229, 0.3)');
+            gradient.addColorStop(1, 'rgba(79, 70, 229, 0.05)');
+
+            new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran'],
+                    datasets: [{
+                        label: 'Randevu Sayısı',
+                        data: [65, 59, 80, 81, 56, 75],
+                        borderColor: '#4f46e5',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#4f46e5',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            cornerRadius: 8,
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                color: '#64748b'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#64748b'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+
+            // Enhanced Department Distribution Chart
+            const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+            
+            // Create gradient colors for donut chart
+            const gradientColors = [
+                createRadialGradient(departmentCtx, '#ff6384', '#ff9fb3'),
+                createRadialGradient(departmentCtx, '#36a2eb', '#7bc3f5'),
+                createRadialGradient(departmentCtx, '#ffce56', '#ffd982'),
+                createRadialGradient(departmentCtx, '#4bc0c0', '#7dd3d3'),
+                createRadialGradient(departmentCtx, '#9966ff', '#b794ff')
+            ];
+
+            new Chart(departmentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Kardiyoloji', 'Nöroloji', 'Ortopedi', 'Genel Cerrahi', 'Dahiliye'],
+                    datasets: [{
+                        data: [30, 25, 20, 15, 10],
+                        backgroundColor: gradientColors,
+                        borderWidth: 0,
+                        cutout: '65%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: {
+                                    size: 12
+                                },
+                                color: '#64748b'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            cornerRadius: 8,
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + ' doktor';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 2000
+                    }
+                }
+            });
+
+            // Helper function to create radial gradients
+            function createRadialGradient(ctx, color1, color2) {
+                const gradient = ctx.createRadialGradient(150, 150, 0, 150, 150, 150);
+                gradient.addColorStop(0, color1);
+                gradient.addColorStop(1, color2);
+                return gradient;
+            }
+
+            // Animation for stats cards
+            $('.stats-card').each(function(index) {
+                setTimeout(() => {
+                    $(this).addClass('animate-in');
+                }, index * 100);
+            });
+
+            // Animate progress bars
+            setTimeout(() => {
+                $('.modern-progress .progress-bar').each(function() {
+                    const width = $(this).css('width');
+                    $(this).css('width', '0%').animate({width: width}, 1500);
+                });
+            }, 500);
+        });
+
+        // Export function
+        function exportReport(format) {
+            // Show loading state
+            $('.modern-btn.primary').addClass('loading');
+            
+            setTimeout(() => {
+                $('.modern-btn.primary').removeClass('loading');
+                alert(`${format.toUpperCase()} formatında rapor indiriliyor...`);
+            }, 1500);
+        }
+
+        // Refresh function
+        function refreshReports() {
+            $('.modern-btn.outline').addClass('loading');
+            
+            setTimeout(() => {
+                $('.modern-btn.outline').removeClass('loading');
+                location.reload();
+            }, 1000);
+        }
+
+        // Update chart function
+        function updateChart(period) {
+            alert(`${period} için grafik güncelleniyor...`);
+        }
+    </script>
+}
+
+<style>
+    /* Stats Cards */
+    .stats-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    
+    .stats-card.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient);
+    }
+    
+    .stats-card.primary::before {
+        background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    }
+    
+    .stats-card.success::before {
+        background: linear-gradient(90deg, #059669, #10b981);
+    }
+    
+    .stats-card.info::before {
+        background: linear-gradient(90deg, #0891b2, #06b6d4);
+    }
+    
+    .stats-card.warning::before {
+        background: linear-gradient(90deg, #d97706, #f59e0b);
+    }
+    
+    .stats-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        margin-bottom: 16px;
+    }
+    
+    .stats-card.primary .stats-icon {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+    
+    .stats-card.success .stats-icon {
+        background: linear-gradient(135deg, #059669, #10b981);
+    }
+    
+    .stats-card.info .stats-icon {
+        background: linear-gradient(135deg, #0891b2, #06b6d4);
+    }
+    
+    .stats-card.warning .stats-icon {
+        background: linear-gradient(135deg, #d97706, #f59e0b);
+    }
+    
+    .stats-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+    
+    .stats-trend {
+        font-size: 0.75rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .stats-trend.positive {
+        color: #059669;
+    }
+    
+    .stats-trend.negative {
+        color: #dc2626;
+    }
+    
+    .stats-trend.neutral {
+        color: #64748b;
+    }
+    
+    /* Chart Containers */
+    .chart-container-modern {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+    
+    .chart-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: between;
+    }
+    
+    .chart-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1e293b;
+        flex: 1;
+    }
+    
+    .chart-body {
+        padding: 20px;
+        height: 300px;
+        position: relative;
+    }
+    
+    /* Performance Table */
+    .rank-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: white;
+    }
+    
+    .rank-badge.gold {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    
+    .rank-badge.silver {
+        background: linear-gradient(135deg, #6b7280, #4b5563);
+    }
+    
+    .rank-badge.bronze {
+        background: linear-gradient(135deg, #92400e, #78350f);
+    }
+    
+    .doctor-info h6 {
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0;
+    }
+    
+    .percentage-badge {
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .percentage-badge.excellent {
+        background: rgba(5, 150, 105, 0.1);
+        color: #059669;
+    }
+    
+    .percentage-badge.good {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+    
+    .modern-progress {
+        position: relative;
+        height: 8px;
+        background: #f1f5f9;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .modern-progress .progress-bar {
+        height: 100%;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+        transition: width 1.5s ease;
+    }
+    
+    .modern-progress .progress-bar.excellent {
+        background: linear-gradient(90deg, #059669, #10b981);
+    }
+    
+    .modern-progress .progress-bar.good {
+        background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    }
+    
+    .progress-text {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #64748b;
+    }
+</style>

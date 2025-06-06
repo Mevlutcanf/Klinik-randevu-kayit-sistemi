@@ -1,0 +1,267 @@
+@model randevu_kayit.ViewModels.RandevuViewModel
+
+@{
+    ViewData["Title"] = "Yeni Randevu";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-gradient-primary">
+                    <h5 class="text-white mb-0">
+                        <i class="bi bi-calendar-plus me-2"></i>
+                        @ViewData["Title"]
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="appointment-progress mb-4">
+                        <div class="step active" id="step1">
+                            <div class="step-icon">
+                                <i class="bi bi-hospital"></i>
+                            </div>
+                            <span>Bölüm Seç</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <div class="step-icon">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <span>Doktor Seç</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <div class="step-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <span>Tarih/Saat Seç</span>
+                        </div>
+                    </div>
+
+                    <form asp-action="Create" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                            <select asp-for="Bolum" asp-items="ViewBag.Bolumler" class="form-select" required>
+                                <option value="">Seçiniz...</option>
+                            </select>
+                                    <label asp-for="Bolum">Bölüm</label>
+                            <span asp-validation-for="Bolum" class="text-danger"></span>
+                                </div>
+                        </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <select asp-for="DoktorId" class="form-select" required disabled>
+                                        <option value="">Önce bölüm seçiniz...</option>
+                            </select>
+                                    <label asp-for="DoktorId">Doktor</label>
+                            <span asp-validation-for="DoktorId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="date" id="randevuTarih" class="form-control" required 
+                                           min="@DateTime.Now.ToString("yyyy-MM-dd")" disabled>
+                                    <label>Randevu Tarihi</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <select id="randevuSaat" class="form-select" required disabled>
+                                        <option value="">Önce tarih seçiniz...</option>
+                                    </select>
+                                    <label>Randevu Saati</label>
+                                </div>
+                                <input type="hidden" asp-for="RandevuTarihi">
+                                <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea asp-for="Sikayet" class="form-control" style="height: 100px" required></textarea>
+                                <label asp-for="Sikayet">Şikayetiniz</label>
+                            <span asp-validation-for="Sikayet" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Randevular 09:00 - 17:00 arasında, 30 dakikalık aralıklarla verilmektedir.
+                            Hafta sonları randevu alınamaz.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Geri Dön
+                            </a>
+                            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                                <i class="bi bi-check2"></i> Randevu Oluştur
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/randevu-create-modern.css" />
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            function updateSteps(step) {
+                $('.step').removeClass('active');
+                for (let i = 1; i <= step; i++) {
+                    $(`#step${i}`).addClass('active');
+                }
+            }
+
+            // Bölüm değiştiğinde doktor listesini güncelle
+            $('#Bolum').change(function () {
+                const selectedBolum = $(this).val();
+                const doktorSelect = $('#DoktorId');
+                const randevuTarih = $('#randevuTarih');
+                const randevuSaat = $('#randevuSaat');
+                
+                // Reset subsequent fields
+                doktorSelect.prop('disabled', true).empty()
+                    .append('<option value="">Seçiniz...</option>');
+                randevuTarih.prop('disabled', true).val('');
+                randevuSaat.prop('disabled', true).empty()
+                    .append('<option value="">Önce tarih seçiniz...</option>');
+                $('#submitBtn').prop('disabled', true);
+                
+                if (selectedBolum) {
+                    updateSteps(1);
+                    doktorSelect.prop('disabled', true)
+                        .empty()
+                        .append('<option value="">Yükleniyor...</option>');
+
+                    // Get doctors from server based on department
+                    $.get('/Randevu/GetDoctorsByDepartment', { department: selectedBolum })
+                        .done(function(doctors) {
+                            doktorSelect.empty()
+                                .append('<option value="">Seçiniz...</option>');
+                            
+                            if (doctors && doctors.length > 0) {
+                                doctors.forEach(function(doctor) {
+                        doktorSelect.append($('<option>', {
+                                        value: doctor.id,
+                                        text: `${doctor.adSoyad} - ${doctor.uzmanlik}`
+                        }));
+                    });
+                                doktorSelect.prop('disabled', false);
+                            } else {
+                                doktorSelect.append('<option value="">Bu bölümde doktor bulunmamaktadır</option>');
+                            }
+                        });
+                } else {
+                    updateSteps(0);
+                }
+            });
+
+            // Doktor seçildiğinde tarih seçimini aktifleştir
+            $('#DoktorId').change(function() {
+                if ($(this).val()) {
+                    updateSteps(2);
+                    $('#randevuTarih').prop('disabled', false);
+                } else {
+                    updateSteps(1);
+                    $('#randevuTarih').prop('disabled', true).val('');
+                    $('#randevuSaat').prop('disabled', true)
+                        .empty()
+                        .append('<option value="">Önce tarih seçiniz...</option>');
+                    $('#submitBtn').prop('disabled', true);
+                }
+            });
+
+            // Tarih seçildiğinde müsait saatleri getir
+            $('#randevuTarih').change(function () {
+                const selectedDate = $(this).val();
+                const selectedDoctor = $('#DoktorId').val();
+                const saatSelect = $('#randevuSaat');
+                
+                if (!selectedDate || !selectedDoctor) {
+                    saatSelect.prop('disabled', true)
+                        .empty()
+                        .append('<option value="">Önce doktor ve tarih seçiniz...</option>');
+                    $('#submitBtn').prop('disabled', true);
+                    return;
+                }
+
+                // Validate date
+                const dateObj = new Date(selectedDate);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (dateObj < today) {
+                    alert('Geçmiş bir tarih seçemezsiniz.');
+                    $(this).val('');
+                    return;
+                }
+
+                const dayOfWeek = dateObj.getDay();
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    alert('Hafta sonu randevu alınamaz.');
+                    $(this).val('');
+                    return;
+                }
+
+                updateSteps(3);
+                saatSelect.prop('disabled', true)
+                    .empty()
+                    .append('<option value="">Yükleniyor...</option>');
+
+                $.get('/Randevu/GetAvailableHours', {
+                    doktorId: selectedDoctor,
+                    date: selectedDate
+                }).done(function (hours) {
+                    saatSelect.empty()
+                        .append('<option value="">Saat seçiniz...</option>');
+                    
+                    if (hours && hours.length > 0) {
+                    hours.forEach(function (time) {
+                        const timeStr = time.hours.toString().padStart(2, '0') + ':' +
+                                      time.minutes.toString().padStart(2, '0');
+                        saatSelect.append($('<option>', {
+                            value: timeStr,
+                            text: timeStr
+                        }));
+                    });
+                    saatSelect.prop('disabled', false);
+                    } else {
+                        saatSelect.append('<option value="">Bu tarihte müsait saat bulunmamaktadır</option>');
+                    }
+                });
+            });
+
+            // Saat seçildiğinde submit butonunu aktifleştir
+            $('#randevuSaat').change(function() {
+                $('#submitBtn').prop('disabled', !$(this).val());
+            });
+
+            // Form submit edilmeden önce tarih ve saati birleştir
+            $('form').submit(function (e) {
+                const date = $('#randevuTarih').val();
+                const time = $('#randevuSaat').val();
+                
+                if (!date || !time) {
+                    e.preventDefault();
+                    alert('Lütfen tarih ve saat seçiniz.');
+                    return;
+                }
+
+                $('#RandevuTarihi').val(date + 'T' + time);
+            });
+        });
+    </script>
+} 

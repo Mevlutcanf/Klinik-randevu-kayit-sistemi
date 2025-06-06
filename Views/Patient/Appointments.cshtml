@@ -1,0 +1,176 @@
+@using randevu_kayit.Models
+@model IEnumerable<Randevu>
+
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/patient-appointments-modern.css" />
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">            <h2 class="mb-4">
+                <i class="bi bi-calendar-check me-3"></i>
+                Randevularım
+            </h2>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+                    <i class="bi bi-calendar-x"></i>
+                    <h4 class="mb-3">Henüz randevunuz bulunmamaktadır</h4>
+                    <p class="text-muted mb-4">Yeni bir randevu oluşturmak için aşağıdaki butona tıklayın.</p>
+                    <a href="@Url.Action("Create", "Randevu")" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Yeni Randevu Oluştur
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tarih & Saat</th>
+                                <th>Doktor</th>
+                                <th>Bölüm</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var appointment in Model.OrderBy(a => a.RandevuTarihi))
+                            {
+                                <tr>
+                                    <td data-label="Tarih & Saat">
+                                        <div class="appointment-date">@appointment.RandevuTarihi.ToString("dd.MM.yyyy")</div>
+                                        <div class="appointment-time">@appointment.RandevuTarihi.ToString("HH:mm")</div>
+                                    </td>
+                                    <td data-label="Doktor">
+                                        <div class="doctor-name">Dr. @appointment.Doktor?.AdSoyad</div>
+                                        <div class="doctor-title">@appointment.Doktor?.Uzmanlik</div>
+                                    </td>                                    <td data-label="Bölüm">
+                                        <span class="badge bg-secondary">
+                                            @(appointment.Doktor?.Uzmanlik ?? "Genel")
+                                        </span>
+                                    </td>
+                                    <td data-label="Durum">
+                                        @switch (appointment.Durum)
+                                        {
+                                            case RandevuDurumu.Aktif:
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle me-1"></i>Aktif
+                                                </span>
+                                                break;
+                                            case RandevuDurumu.Tamamlandi:
+                                                <span class="badge bg-info">
+                                                    <i class="bi bi-check2-all me-1"></i>Tamamlandı
+                                                </span>
+                                                break;
+                                            case RandevuDurumu.Iptal:
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-x-circle me-1"></i>İptal
+                                                </span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td data-label="İşlemler">
+                                        <div class="action-buttons">
+                                            @if (appointment.Durum == RandevuDurumu.Aktif && appointment.RandevuTarihi > DateTime.Now.AddHours(2))
+                                            {
+                                                <form asp-action="CancelAppointment" method="post" style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@appointment.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Randevuyu iptal etmek istediğinize emin misiniz?\n\nNot: Randevu tarihinden en az 2 saat önce iptal edilmelidir.')">
+                                                        <i class="bi bi-x-circle me-1"></i>İptal Et
+                                                    </button>
+                                                </form>
+                                            }
+                                            @if (appointment.Durum == RandevuDurumu.Tamamlandi && !string.IsNullOrEmpty(appointment.DoktorNotu))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#doktorNotu-@appointment.Id">
+                                                    <i class="bi bi-file-text me-1"></i>Doktor Notu
+                                                </button>
+                                            }
+                                            @if (appointment.RandevuTarihi.Date == DateTime.Today && appointment.Durum == RandevuDurumu.Aktif)
+                                            {
+                                                <span class="badge bg-info">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>Bugün
+                                                </span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Doktor Notu Modals -->
+                @foreach (var appointment in Model.Where(a => !string.IsNullOrEmpty(a.DoktorNotu)))
+                {
+                    <div class="modal fade" id="doktorNotu-@appointment.Id" tabindex="-1" aria-labelledby="doktorNotuLabel-@appointment.Id" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="doktorNotuLabel-@appointment.Id">
+                                        <i class="bi bi-stethoscope me-2"></i>
+                                        Doktor Notu - @appointment.RandevuTarihi.ToString("dd.MM.yyyy")
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <strong>Doktor:</strong> Dr. @appointment.Doktor?.AdSoyad
+                                    </div>
+                                    <div class="mb-3">
+                                        <strong>Tarih:</strong> @appointment.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-file-text me-2"></i>
+                                        <strong>Doktor Notu:</strong>
+                                        <div class="mt-2">@appointment.DoktorNotu</div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Quick Actions -->
+                <div class="mt-4 text-center">
+                    <a href="@Url.Action("Create", "Randevu")" class="btn btn-primary me-2">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Yeni Randevu Oluştur
+                    </a>
+                    <a href="@Url.Action("Create", "QuickAppointment")" class="btn btn-outline-primary">
+                        <i class="bi bi-lightning me-2"></i>
+                        Hızlı Randevu
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

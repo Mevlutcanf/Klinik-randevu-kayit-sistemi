@@ -1,0 +1,180 @@
+@model randevu_kayit.Models.Randevu
+@using randevu_kayit.Models
+
+@{
+    ViewData["Title"] = "Randevu Detayları";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center bg-gradient-primary text-white">
+                    <h5 class="mb-0">Randevu Detayları</h5>
+                    <span class="badge bg-@(Model.Durum == RandevuDurumu.Aktif ? "warning" : 
+                                         Model.Durum == RandevuDurumu.Tamamlandi ? "success" : "danger")">
+                        @Model.Durum
+                    </span>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateAppointmentDetails" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control bg-light" value="@Model.Hasta.AdSoyad" readonly />
+                                    <label>Hasta</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control bg-light" value="@Model.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")" readonly />
+                                    <label>Randevu Tarihi</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea name="sikayet" class="form-control medical-input" rows="2" style="height: 100px">@Model.Sikayet</textarea>
+                                <label>Başvuru Şikayeti</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea name="tani" class="form-control medical-input" rows="2" style="height: 100px">@Model.Tani</textarea>
+                                <label>Teşhis</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea name="tedavi" class="form-control medical-input" rows="2" style="height: 100px">@Model.Tedavi</textarea>
+                                <label>Tedavi</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea name="recete" class="form-control medical-input" rows="3" style="height: 150px">@Model.Recete</textarea>
+                                <label>Reçete</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea name="doktorNotu" class="form-control medical-input" rows="3" style="height: 150px">@Model.DoktorNotu</textarea>
+                                <label>Doktor Notları</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                @{
+                                    var options = new[] {
+                                        new { Value = "Aktif", Text = "Aktif", Selected = Model.Durum == RandevuDurumu.Aktif },
+                                        new { Value = "Tamamlandı", Text = "Tamamlandı", Selected = Model.Durum == RandevuDurumu.Tamamlandi },
+                                        new { Value = "İptal", Text = "İptal", Selected = Model.Durum == RandevuDurumu.Iptal }
+                                    };
+                                }
+                                <select name="durum" class="form-select medical-input">
+                                    @foreach (var option in options)
+                                    {
+                                        <option value="@option.Value" selected="@option.Selected">@option.Text</option>
+                                    }
+                                </select>
+                                <label>Durum</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save me-2"></i>Kaydet
+                            </button>
+                            <a asp-action="Appointments" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+        
+        .medical-input {
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .medical-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+            background-color: #fff;
+        }
+        
+        .medical-input:hover {
+            border-color: var(--primary-color);
+        }
+        
+        textarea.form-control {
+            resize: none;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-color);
+            transform: translateY(-1px);
+        }
+        
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: var(--primary-color);
+        }
+        
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #f8f9fa;
+            opacity: 1;
+        }
+    </style>
+} 

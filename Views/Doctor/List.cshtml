@@ -1,0 +1,78 @@
+@model IEnumerable<randevu_kayit.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Doktorlarımız";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-5">@ViewData["Title"]</h2>
+
+            <div class="row g-4">
+                @foreach (var doctor in Model.Where(d => d.Department != null))
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="text-center mb-4">
+                                    @if (!string.IsNullOrEmpty(doctor.ProfilePhotoPath))
+                                    {
+                                        <img src="@doctor.ProfilePhotoPath" alt="@doctor.AdSoyad" 
+                                             class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3"
+                                             style="width: 120px; height: 120px;">
+                                            <i class="bi bi-person-fill text-secondary" style="font-size: 3rem;"></i>
+                                        </div>
+                                    }
+                                    <h5 class="card-title mb-1">Dr. @doctor.AdSoyad</h5>
+                                    <p class="text-muted small mb-2">@doctor.Department?.Name</p>
+                                    @if (!string.IsNullOrEmpty(doctor.Uzmanlik))
+                                    {
+                                        <span class="badge bg-primary">@doctor.Uzmanlik</span>
+                                    }
+                                </div>
+
+                                <hr>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="small text-muted">
+                                        <i class="bi bi-telephone me-2"></i>
+                                        @(string.IsNullOrEmpty(doctor.PhoneNumber) ? "Telefon bilgisi yok" : doctor.PhoneNumber)
+                                    </div>
+                                    @if (User.Identity?.IsAuthenticated ?? false)
+                                    {
+                                        <a asp-controller="Randevu" asp-action="Create" 
+                                           asp-route-doktorId="@doctor.Id"
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-calendar-plus me-1"></i>
+                                            Randevu Al
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            transition: transform 0.2s ease-in-out;
+            border-radius: 15px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .badge {
+            font-weight: normal;
+            padding: 0.5em 1em;
+        }
+    </style>
+} 

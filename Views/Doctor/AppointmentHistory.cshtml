@@ -1,0 +1,169 @@
+@using randevu_kayit.Models
+@model IEnumerable<Randevu>
+
+@{
+    ViewData["Title"] = "Randevu Geçmişi";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-clock-history me-2"></i>
+                Randevu Geçmişi
+            </h2>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="startDate" class="form-label">Başlangıç Tarihi</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" value="@ViewBag.StartDate?.ToString("yyyy-MM-dd")">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="endDate" class="form-label">Bitiş Tarihi</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate" value="@ViewBag.EndDate?.ToString("yyyy-MM-dd")">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search me-2"></i>Filtrele
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Seçilen tarih aralığında randevu bulunmamaktadır.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Hasta</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var appointment in Model)
+                            {
+                                <tr>
+                                    <td>@appointment.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>@appointment.Hasta.AdSoyad</td>
+                                    <td>
+                                        @switch (appointment.Durum)
+                                        {
+                                            case RandevuDurumu.Aktif:
+                                                <span class="badge bg-success">Aktif</span>
+                                                break;
+                                            case RandevuDurumu.Tamamlandi:
+                                                <span class="badge bg-info">Tamamlandı</span>
+                                                break;
+                                            case RandevuDurumu.Iptal:
+                                                <span class="badge bg-danger">İptal</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (appointment.Durum == RandevuDurumu.Aktif)
+                                        {
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addMedicalHistoryModal" data-appointment-id="@appointment.Id" data-patient-name="@appointment.Hasta.AdSoyad">
+                                                <i class="bi bi-journal-plus me-1"></i>Muayene Ekle
+                                            </button>
+                                        }
+                                        <a asp-action="PatientHistory" asp-route-hastaId="@appointment.HastaId" class="btn btn-sm btn-info">
+                                            <i class="bi bi-journal-medical me-1"></i>Hasta Geçmişi
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Add Medical History Modal -->
+<div class="modal fade" id="addMedicalHistoryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="AddMedicalHistory" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="appointmentId" id="appointmentId" />
+                
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-journal-plus me-2"></i>
+                        Muayene Ekle - <span id="patientName"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="tani" class="form-label">Tanı</label>
+                        <input type="text" class="form-control" id="tani" name="tani" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="tedavi" class="form-label">Tedavi</label>
+                        <textarea class="form-control" id="tedavi" name="tedavi" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="yazilanIlaclar" class="form-label">Yazılan İlaçlar</label>
+                        <textarea class="form-control" id="yazilanIlaclar" name="yazilanIlaclar" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="labSonuclari" class="form-label">Laboratuvar Sonuçları</label>
+                        <textarea class="form-control" id="labSonuclari" name="labSonuclari" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="notlar" class="form-label">Notlar</label>
+                        <textarea class="form-control" id="notlar" name="notlar" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="sonrakiRandevuTarihi" class="form-label">Sonraki Randevu Tarihi</label>
+                        <input type="date" class="form-control" id="sonrakiRandevuTarihi" name="sonrakiRandevuTarihi">
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-2"></i>Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#addMedicalHistoryModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var appointmentId = button.data('appointment-id');
+                var patientName = button.data('patient-name');
+                
+                var modal = $(this);
+                modal.find('#appointmentId').val(appointmentId);
+                modal.find('#patientName').text(patientName);
+            });
+        });
+    </script>
+} 
