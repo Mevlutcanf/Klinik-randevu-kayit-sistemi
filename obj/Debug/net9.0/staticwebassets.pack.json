@@ -593,6 +593,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.map"
     },
     {
+      "Id": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\test-ajax.html",
+      "PackagePath": "staticwebassets\\test-ajax.html"
+    },
+    {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.randevu_kayit.props",
       "PackagePath": "build\\randevu_kayit.props"
     },

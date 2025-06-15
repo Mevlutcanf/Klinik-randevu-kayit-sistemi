@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Department & Doctor Test</h2>
+    
+    <select id="department">
+        <option value="">Seçiniz...</option>
+        <option value="1">Dahiliye</option>
+        <option value="2">Kardiyoloji</option>
+        <option value="3">Genel Cerrahı</option>
+        <option value="4">Göz Hastalıkları</option>
+        <option value="5">Kulak Burun Boğaz</option>
+    </select>
+    
+    <br><br>
+    
+    <select id="doctor" disabled>
+        <option value="">Önce bölüm seçiniz</option>
+    </select>
+    
+    <br><br>
+    
+    <button onclick="testAPI()">Test API Directly</button>
+    
+    <div id="log" style="margin-top: 20px; background: #f0f0f0; padding: 10px; height: 300px; overflow-y: scroll;"></div>
+
+    <script>
+        function log(message) {
+            $('#log').append('<p>' + new Date().toLocaleTimeString() + ': ' + message + '</p>');
+            $('#log').scrollTop($('#log')[0].scrollHeight);
+        }
+        
+        function testAPI() {
+            log('Testing API directly...');
+            $.ajax({
+                url: '/QuickAppointment/GetDoctorsByDepartment?departmentId=1',
+                type: 'GET',
+                success: function(data) {
+                    log('Direct API SUCCESS: ' + JSON.stringify(data));
+                },
+                error: function(xhr, status, error) {
+                    log('Direct API ERROR: ' + error + ', Status: ' + status + ', Response: ' + xhr.responseText);
+                }
+            });
+        }
+        
+        $('#department').change(function() {
+            var departmentId = $(this).val();
+            log('Department changed to: ' + departmentId);
+            
+            var doctorSelect = $('#doctor');
+            
+            if (departmentId) {
+                log('Making AJAX request...');
+                doctorSelect.prop('disabled', true);
+                doctorSelect.html('<option value="">Yükleniyor...</option>');
+                
+                $.ajax({
+                    url: '/QuickAppointment/GetDoctorsByDepartment',
+                    type: 'GET',
+                    data: { departmentId: departmentId },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(data) {
+                        log('AJAX SUCCESS: ' + JSON.stringify(data));
+                        doctorSelect.html('<option value="">Doktor Seçiniz</option>');
+                        
+                        if (data && data.length > 0) {
+                            log('Found ' + data.length + ' doctors');
+                            $.each(data, function(i, doctor) {
+                                log('Adding doctor: ' + doctor.adSoyad);
+                                doctorSelect.append('<option value="' + doctor.id + '">' + doctor.adSoyad + '</option>');
+                            });
+                            doctorSelect.prop('disabled', false);
+                        } else {
+                            log('No doctors found');
+                            doctorSelect.append('<option value="">Bu bölümde doktor bulunamadı</option>');
+                            doctorSelect.prop('disabled', false);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        log('AJAX ERROR: ' + error + ', Status: ' + status + ', Response: ' + xhr.responseText);
+                        doctorSelect.html('<option value="">Hata: Doktor bulunamadı</option>');
+                        doctorSelect.prop('disabled', false);
+                    }
+                });
+            } else {
+                log('No department selected');
+                doctorSelect.html('<option value="">Önce Bölüm Seçiniz</option>');
+                doctorSelect.prop('disabled', true);
+            }
+        });
+        
+        log('Test page loaded, ready for testing');
+    </script>
+</body>
+</html>

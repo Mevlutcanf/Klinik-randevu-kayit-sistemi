@@ -40,37 +40,105 @@ namespace randevu_kayit.Controllers
             var departments = await _context.Departments.OrderBy(d => d.Name).ToListAsync();
             ViewBag.Departments = departments;
             return View();
-        }
-
-        [HttpPost]
+        }        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(QuickAppointment appointment)
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    // AJAX request için JSON response                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        var errors = ModelState.Where(x => x.Value?.Errors?.Count > 0)
+                            .Select(x => new { Field = x.Key, Errors = x.Value?.Errors?.Select(e => e.ErrorMessage) ?? new List<string>() })
+                            .ToList();
+                        return Json(new { success = false, message = "Form bilgileri eksik veya hatalı.", errors = errors });
+                    }
+                    
+                    var departments = await _context.Departments.OrderBy(d => d.Name).ToListAsync();
+                    ViewBag.Departments = departments;
+                    return View(appointment);
+                }
+
+                // Check for appointment conflicts
+                var hasConflict = await _context.QuickAppointments
+                    .AnyAsync(a => a.DoktorId == appointment.DoktorId &&
+                                  a.TarihSaat == appointment.TarihSaat &&
+                                  a.Durum != QuickAppointmentStatus.Reddedildi);
+
+                if (hasConflict)
+                {
+                    // AJAX request için JSON response
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = false, message = "Seçilen tarih ve saatte doktor müsait değil." });
+                    }
+                    
+                    ModelState.AddModelError("", "Seçilen tarih ve saatte doktor müsait değil.");
+                    var departments = await _context.Departments.OrderBy(d => d.Name).ToListAsync();
+                    ViewBag.Departments = departments;
+                    return View(appointment);
+                }                // Set default values
+                appointment.OlusturmaTarihi = DateTime.Now;
+                if (appointment.Durum == 0)
+                {
+                    appointment.Durum = QuickAppointmentStatus.Bekliyor;
+                }
+
+                // Set DepartmentId based on the selected doctor's department
+                if (!string.IsNullOrEmpty(appointment.DoktorId))
+                {
+                    var doctor = await _userManager.FindByIdAsync(appointment.DoktorId);
+                    if (doctor != null && doctor.DepartmentId.HasValue)
+                    {
+                        appointment.DepartmentId = doctor.DepartmentId.Value;
+                    }
+                }
+
+                _context.QuickAppointments.Add(appointment);
+                await _context.SaveChangesAsync();
+
+                // AJAX request için JSON response
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { 
+                        success = true, 
+                        message = "Randevunuz başarıyla oluşturuldu.", 
+                        appointmentId = appointment.Id 
+                    });
+                }
+
+                return RedirectToAction(nameof(Confirmation), new { id = appointment.Id });
+            }            catch (Exception ex)
+            {
+                // Log the error with inner exception details
+                Console.WriteLine($"Error creating appointment: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner exception stack trace: {ex.InnerException.StackTrace}");
+                }
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                
+                // Get detailed error message
+                var errorMessage = ex.InnerException?.Message ?? ex.Message;
+                
+                // AJAX request için JSON response
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { 
+                        success = false, 
+                        message = $"Randevu oluşturulurken bir hata oluştu: {errorMessage}" 
+                    });
+                }
+                
+                ModelState.AddModelError("", $"Randevu oluşturulurken bir hata oluştu: {errorMessage}");
                 var departments = await _context.Departments.OrderBy(d => d.Name).ToListAsync();
                 ViewBag.Departments = departments;
                 return View(appointment);
             }
-
-            // Check for appointment conflicts
-            var hasConflict = await _context.QuickAppointments
-                .AnyAsync(a => a.DoktorId == appointment.DoktorId &&
-                              a.TarihSaat == appointment.TarihSaat);
-
-            if (hasConflict)
-            {
-                ModelState.AddModelError("", "Seçilen tarih ve saatte doktor müsait değil.");
-                var departments = await _context.Departments.OrderBy(d => d.Name).ToListAsync();
-                ViewBag.Departments = departments;
-                return View(appointment);
-            }
-
-            _context.QuickAppointments.Add(appointment);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Confirmation), new { id = appointment.Id });
-        }        [HttpGet]
+        }[HttpGet]
         public async Task<IActionResult> GetDoctorsByDepartment(int departmentId)
         {
             try

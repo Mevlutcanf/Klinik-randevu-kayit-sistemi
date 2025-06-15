@@ -92,14 +92,13 @@ namespace randevu_kayit.Data
             {
                 var existingDoctor = await userManager.FindByEmailAsync(doctor.Email);
                 if (existingDoctor == null)
-                {
-                    var department = await dbContext.Departments.FirstOrDefaultAsync(d => d.Name == doctor.Bolum);
+                {                var department = await dbContext.Departments.FirstOrDefaultAsync(d => d.Name == doctor.Bolum);
                     var newDoctor = new ApplicationUser
                     {
                         UserName = doctor.Email,
                         Email = doctor.Email,
                         AdSoyad = doctor.AdSoyad,
-                        Department = department,
+                        DepartmentId = department?.Id,
                         Uzmanlik = doctor.Uzmanlik,
                         EmailConfirmed = true
                     };

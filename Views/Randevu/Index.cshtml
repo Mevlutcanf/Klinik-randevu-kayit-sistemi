@@ -4,6 +4,8 @@
     ViewData["Title"] = "Randevularım";
 }
 
+@Html.AntiForgeryToken()
+
 <link rel="stylesheet" href="~/css/randevu-modern.css" />
 
 <!-- Modern Hero Section -->
@@ -271,7 +273,13 @@
                         }
                     });
                     
-                    $.post('/Randevu/Cancel/' + id)
+                    $.ajax({
+                        url: '/Randevu/Cancel/' + id,
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        }
+                    })
                         .done(function(response) {
                             Swal.fire({
                                 title: 'Başarılı!',

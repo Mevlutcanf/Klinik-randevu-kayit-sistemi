@@ -1,0 +1,137 @@
+@model QuickAppointment
+
+@{
+    ViewData["Title"] = "Hızlı Randevu - Test";
+}
+
+<div class="container mt-4">
+    <h2>Hızlı Randevu</h2>
+    
+    <form asp-action="Create" method="post" id="quickForm">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="AdSoyad" class="form-label">Ad Soyad</label>
+                    <input asp-for="AdSoyad" class="form-control" required />
+                    <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="TCKimlikNo" class="form-label">TC Kimlik No</label>
+                    <input asp-for="TCKimlikNo" class="form-control" required />
+                    <span asp-validation-for="TCKimlikNo" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Telefon" class="form-label">Telefon</label>
+                    <input asp-for="Telefon" class="form-control" required />
+                    <span asp-validation-for="Telefon" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">E-posta</label>
+                    <input asp-for="Email" class="form-control" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="DepartmentId" class="form-label">Bölüm</label>
+                    <select asp-for="DepartmentId" id="DepartmentId" class="form-select" required>
+                        <option value="">Seçiniz...</option>
+                        @if (ViewBag.Departments != null)
+                        {
+                            @foreach (var dept in ViewBag.Departments)
+                            {
+                                <option value="@dept.Id">@dept.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="DoktorId" class="form-label">Doktor</label>
+                    <select asp-for="DoktorId" id="DoktorId" class="form-select" required disabled>
+                        <option value="">Önce bölüm seçiniz...</option>
+                    </select>
+                    <span asp-validation-for="DoktorId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <div class="mb-3">
+                    <label asp-for="TarihSaat" class="form-label">Randevu Tarihi ve Saati</label>
+                    <input asp-for="TarihSaat" type="datetime-local" class="form-control" required />
+                    <span asp-validation-for="TarihSaat" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Sikayet" class="form-label">Şikayet</label>
+            <textarea asp-for="Sikayet" class="form-control" rows="3" required></textarea>
+            <span asp-validation-for="Sikayet" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Randevu Oluştur</button>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">İptal</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    console.log('Quick appointment form loaded');
+    
+    // Department change handler
+    $('#DepartmentId').change(function() {
+        var departmentId = $(this).val();
+        console.log('Department changed to: ' + departmentId);
+        
+        var $doctorSelect = $('#DoktorId');
+        
+        if (departmentId) {
+            console.log('Loading doctors for department: ' + departmentId);
+            $doctorSelect.prop('disabled', true).html('<option value="">Yükleniyor...</option>');
+            
+            $.get('/QuickAppointment/GetDoctorsByDepartment', { departmentId: departmentId })
+                .done(function(data) {
+                    console.log('Doctors loaded: ' + JSON.stringify(data));
+                    $doctorSelect.html('<option value="">Doktor Seçiniz</option>');
+                    
+                    if (data && data.length > 0) {
+                        $.each(data, function(i, doctor) {
+                            $doctorSelect.append($('<option></option>')
+                                .val(doctor.id)
+                                .text(doctor.adSoyad + ' - ' + (doctor.uzmanlik || 'Uzman')));
+                        });
+                    } else {
+                        $doctorSelect.append('<option value="">Bu bölümde doktor bulunamadı</option>');
+                    }
+                    $doctorSelect.prop('disabled', false);
+                })
+                .fail(function(xhr, status, error) {
+                    console.log('Doctor loading failed: ' + error);
+                    $doctorSelect.html('<option value="">Hata: Doktor yüklenemedi</option>').prop('disabled', false);
+                });
+        } else {
+            $doctorSelect.html('<option value="">Önce bölüm seçiniz</option>').prop('disabled', true);
+        }
+    });
+});
+</script>

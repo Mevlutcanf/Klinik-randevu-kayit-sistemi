@@ -374,7 +374,6 @@ C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\v0zgfp0y55-87f
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\yfc7ypekbg-mlv21k5csn.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\owfc8w5g59-js058zzznc.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\04bhc05tup-gej4dqccxb.gz
-C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\2be3xqavjo-4xuy1e9r3q.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\ydn420kqa2-3qdl6e2cgt.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\3yb8p7ao0q-4u1xilg6l2.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\sennwa6po4-fjhar097d6.gz
@@ -385,3 +384,5 @@ C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\ihz1wsf3x1-y2d
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\h5vajf952j-pz3bm3n2z7.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\frk4xmfdy1-6mozqco11k.gz
 C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\gzqg2wn91i-mjvcumgysq.gz
+C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\2be3xqavjo-d5qwisneil.gz
+C:\Users\mevlut\Desktop\randevu_kayit\obj\Debug\net9.0\compressed\nlayzhvug0-3tiie4irbd.gz

@@ -94,8 +94,7 @@
                     <p class="text-white-50 mb-0">Lütfen tüm alanları eksiksiz doldurunuz</p>
                 </div>
                 
-                <div class="card-body p-4">
-                    <form asp-action="Create" method="post" id="quickAppointmentForm" class="needs-validation" novalidate>
+                <div class="card-body p-4">                    <form asp-action="Create" method="post" id="quickAppointmentForm" class="needs-validation" novalidate>                        @Html.AntiForgeryToken()
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible" role="alert"></div>
 
                         <!-- Personal Information Section -->
@@ -104,12 +103,18 @@
                                 <i class="bi bi-person-circle me-2"></i>
                                 Kişisel Bilgileriniz
                             </h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <div class="row">                                <div class="col-md-6 mb-3">
                                     <div class="form-floating">
                                         <input asp-for="AdSoyad" class="form-control" placeholder="Ad Soyad" required />
                                         <label asp-for="AdSoyad">Ad Soyad</label>
                                         <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input asp-for="Email" class="form-control" placeholder="E-posta" required type="email" />
+                                        <label asp-for="Email">E-posta</label>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -137,22 +142,27 @@
                                 <i class="bi bi-building me-2"></i>
                                 Bölüm ve Doktor Seçimi
                             </h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-floating">
-                                        <select id="DepartmentId" class="form-select" required>
+                            <div class="row">                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">                                        <select asp-for="DepartmentId" id="DepartmentId" class="form-select" required>
                                             <option value="">Seçiniz...</option>
-                                            @foreach (var dept in ViewBag.Departments)
+                                            @if (ViewBag.Departments != null)
                                             {
-                                                <option value="@dept.Id">@dept.Name</option>
+                                                @foreach (var dept in ViewBag.Departments)
+                                                {
+                                                    <option value="@dept.Id">@dept.Name</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="">Departmanlar yüklenemedi</option>
                                             }
                                         </select>
                                         <label for="DepartmentId">Bölüm</label>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                     </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
+                                </div>                                <div class="col-md-6 mb-3">
                                     <div class="form-floating">
-                                        <select asp-for="DoktorId" class="form-select" required disabled>
+                                        <select asp-for="DoktorId" id="DoktorId" class="form-select" required disabled>
                                             <option value="">Önce bölüm seçiniz...</option>
                                         </select>
                                         <label asp-for="DoktorId">Doktor</label>
@@ -255,56 +265,79 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <script>
-        $(document).ready(function () {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    <script>
+        // Ensure jQuery is loaded
+        if (typeof jQuery === 'undefined') {
+            console.error('jQuery is not loaded!');
+            alert('jQuery is not loaded. Please refresh the page.');
+        } else {
+            console.log('jQuery loaded successfully:', jQuery.fn.jquery);
+        }        $(document).ready(function () {
             let currentStep = 1;
             const totalSteps = 4;
             
             // Initialize form validation
-            initializeFormValidation();
-            
-            // Initialize step navigation
-            updateProgressSteps();
-            
-            // Department change handler
+            initializeFormValidation();            // Department change handler            
             $('#DepartmentId').change(function () {
                 var departmentId = $(this).val();
                 var doctorSelect = $('#DoktorId');
                 
-                doctorSelect.prop('disabled', true);
-                doctorSelect.html('<option value="">Yükleniyor...</option>');
+                console.log('Department changed to:', departmentId);
                 
-                if (departmentId) {
+                if (departmentId && departmentId !== '') {
+                    doctorSelect.prop('disabled', true);
+                    doctorSelect.html('<option value="">Yükleniyor...</option>');
                     updateProgressSteps(2);
                     
-                    $.get('/QuickAppointment/GetDoctorsByDepartment/' + departmentId, function (data) {
-                        doctorSelect.html('<option value="">Doktor Seçiniz</option>');
-                        $.each(data, function (i, doctor) {
-                            doctorSelect.append($('<option></option>')
-                                .val(doctor.id)
-                                .text(doctor.adSoyad + ' - ' + (doctor.uzmanlik || 'Uzman Doktor')));
-                        });
-                        doctorSelect.prop('disabled', false);
-                    }).fail(function() {
-                        doctorSelect.html('<option value="">Doktor bulunamadı</option>');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hata!',
-                            text: 'Doktorlar yüklenirken bir hata oluştu.',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                    $.ajax({
+                        url: '/QuickAppointment/GetDoctorsByDepartment',
+                        type: 'GET',
+                        data: { departmentId: parseInt(departmentId) },
+                        dataType: 'json',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        timeout: 10000,
+                        success: function (data) {
+                            console.log('AJAX success. Received', data.length, 'doctors');
+                            doctorSelect.html('<option value="">Doktor Seçiniz</option>');
+                            
+                            if (data && Array.isArray(data) && data.length > 0) {
+                                $.each(data, function (i, doctor) {
+                                    doctorSelect.append($('<option></option>')
+                                        .val(doctor.id)
+                                        .text(doctor.adSoyad + ' - ' + (doctor.uzmanlik || 'Uzman Doktor')));
+                                });
+                                doctorSelect.prop('disabled', false);
+                                console.log('Doctor dropdown enabled with', data.length, 'doctors');
+                            } else {
+                                console.log('No doctors found');
+                                doctorSelect.append('<option value="">Bu bölümde doktor bulunamadı</option>');
+                                doctorSelect.prop('disabled', false);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error, 'Status:', status);
+                            doctorSelect.html('<option value="">Hata: Doktor bulunamadı</option>');
+                            doctorSelect.prop('disabled', false);
+                            
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Hata!',
+                                text: 'Doktorlar yüklenirken bir hata oluştu.',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
                     });
                 } else {
                     doctorSelect.html('<option value="">Önce Bölüm Seçiniz</option>');
+                    doctorSelect.prop('disabled', true);
                     updateProgressSteps(1);
                 }
             });
-            
             // Doctor change handler
             $('#DoktorId').change(function() {
                 if ($(this).val()) {
@@ -319,13 +352,19 @@
                     updateProgressSteps(4);
                 }
             });
-            
-            // Form submission
+              // Form submission
             $('#quickAppointmentForm').submit(function(e) {
                 e.preventDefault();
                 
                 if (validateForm()) {
                     submitForm();
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Eksik Bilgiler',
+                        text: 'Lütfen tüm zorunlu alanları doldurun.',
+                        confirmButtonText: 'Tamam'
+                    });
                 }
             });
             
@@ -354,16 +393,21 @@
                 
                 if (field.prop('required') && !value) {
                     isValid = false;
-                    errorMessage = 'Bu alan zorunludur.';
-                } else if (fieldName === 'TCKimlikNo' && value) {
-                    if (!/^[0-9]{11}$/.test(value)) {
-                        isValid = false;
-                        errorMessage = 'TC Kimlik No 11 haneli sayı olmalıdır.';
+                    errorMessage = 'Bu alan zorunludur.';                } else if (fieldName === 'TCKimlikNo' && value) {
+                    // TC Kimlik validation - use \d instead of [0-9] to avoid Razor parsing issues
+                    if (!/^\d{11}$/.test(value)) {
+                        isValid = false;                        errorMessage = 'TC Kimlik No 11 haneli sayı olmalıdır.';
                     }
                 } else if (fieldName === 'Telefon' && value) {
-                    if (!/^[0-9]{10,11}$/.test(value.replace(/\s/g, ''))) {
+                    // Phone validation - use \d instead of [0-9] to avoid Razor parsing issues
+                    if (!/^\d{10,11}$/.test(value.replace(/\s/g, ''))) {
                         isValid = false;
                         errorMessage = 'Geçerli bir telefon numarası giriniz.';
+                    }                } else if (fieldName === 'Email' && value) {
+                    // Use a simpler email validation to avoid Razor parsing issues
+                    if (!/^\S+@@\S+\.\S+$/.test(value)) {
+                        isValid = false;
+                        errorMessage = 'Geçerli bir e-posta adresi giriniz.';
                     }
                 } else if (fieldName === 'TarihSaat' && value) {
                     const selectedDate = new Date(value);
@@ -440,10 +484,10 @@
                 
                 return true;
             }
-            
-            function validateForm() {
+              function validateForm() {
                 let isValid = true;
-                const requiredFields = $('input[required], select[required], textarea[required]');
+                // Use string concatenation to avoid Razor parsing issues with square brackets
+                const requiredFields = $('input' + '[required]' + ', select' + '[required]' + ', textarea' + '[required]');
                 
                 requiredFields.each(function() {
                     if (!validateField($(this))) {
@@ -467,10 +511,9 @@
                         stepElement.addClass('active');
                     }
                 }
-            }
-            
-            function updateSubmitButton() {
-                const allValid = $('input[required], select[required], textarea[required]').toArray().every(field => {
+            }            function updateSubmitButton() {
+                // Use string concatenation to avoid Razor parsing issues with square brackets
+                const allValid = $('input' + '[required]' + ', select' + '[required]' + ', textarea' + '[required]').toArray().every(field => {
                     return $(field).hasClass('is-valid') || $(field).val() !== '';
                 });
                 
@@ -490,36 +533,69 @@
                 
                 // Submit the form
                 const formData = new FormData($('#quickAppointmentForm')[0]);
-                
-                $.ajax({
+                  $.ajax({
                     url: $('#quickAppointmentForm').attr('action'),
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Başarılı!',
-                            text: 'Randevunuz başarıyla oluşturuldu. En kısa sürede size dönüş yapılacaktır.',
-                            confirmButtonText: 'Tamam'
-                        }).then(() => {
-                            window.location.href = '/QuickAppointment/Confirmation';
-                        });
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
                     },
-                    error: function(xhr, status, error) {
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Başarılı!',
+                                text: response.message,
+                                confirmButtonText: 'Tamam'
+                            }).then(() => {
+                                window.location.href = '/QuickAppointment/Confirmation?id=' + response.appointmentId;
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Hata!',
+                                text: response.message,
+                                confirmButtonText: 'Tamam'
+                            });
+                        }
+                    },                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        console.error('Status:', status);
+                        console.error('Response Text:', xhr.responseText);
+                        console.error('Status Code:', xhr.status);
+                        
+                        let errorMessage = 'Randevu oluşturulurken bir hata oluştu.';
+                        
+                        // Try to parse error response
+                        try {
+                            if (xhr.responseText) {
+                                const errorResponse = JSON.parse(xhr.responseText);
+                                if (errorResponse.message) {
+                                    errorMessage = errorResponse.message;
+                                }
+                            }
+                        } catch (e) {
+                            // If response is not JSON, show generic error
+                            if (xhr.status === 400) {
+                                errorMessage = 'Form bilgileri eksik veya hatalı.';
+                            } else if (xhr.status === 500) {
+                                errorMessage = 'Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyiniz.';
+                            }
+                        }
+                        
                         Swal.fire({
                             icon: 'error',
                             title: 'Hata!',
-                            text: 'Randevu oluşturulurken bir hata oluştu. Lütfen tekrar deneyiniz.',
+                            text: errorMessage,
                             confirmButtonText: 'Tamam'
                         });
                     }
                 });
-            }
-            
-            // Initialize tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            }            // Initialize tooltips
+            // Use attribute selector with string concatenation to avoid Razor parsing issues
+            $('[' + 'data-bs-toggle="tooltip"' + ']').tooltip();
             
             // Animate form sections
             $('.form-section').each(function(index) {

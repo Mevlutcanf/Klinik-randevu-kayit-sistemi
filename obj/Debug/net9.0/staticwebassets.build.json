@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AMkulkyq5p63AXFP5iu2Ziw8iYLTeVdibUvIiUsso4A=",
+  "Hash": "II6HTDypLENVE2QzHCfmLP3G/lr25Kqex7X97kYgHo4=",
   "Source": "randevu_kayit",
   "BasePath": "_content/randevu_kayit",
   "Mode": "Default",
@@ -1508,12 +1508,12 @@
       "OriginalItemSpec": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Identity": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-4xuy1e9r3q.gz",
+      "Identity": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-d5qwisneil.gz",
       "SourceId": "randevu_kayit",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/randevu_kayit",
-      "RelativePath": "css/site#[.{fingerprint=4xuy1e9r3q}]?.css.gz",
+      "RelativePath": "css/site#[.{fingerprint=d5qwisneil}]?.css.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -1522,8 +1522,8 @@
       "RelatedAsset": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\site.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "huh413bxwc",
-      "Integrity": "p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s=",
+      "Fingerprint": "a6za5j3sr3",
+      "Integrity": "bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\site.css"
@@ -3627,6 +3627,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Identity": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\nlayzhvug0-3tiie4irbd.gz",
+      "SourceId": "randevu_kayit",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/randevu_kayit",
+      "RelativePath": "test-ajax#[.{fingerprint=3tiie4irbd}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\test-ajax.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "8bnngjfq7m",
+      "Integrity": "xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\test-ajax.html"
     },
     {
       "Identity": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\nlrl0f3xs3-jd9uben2k1.gz",
@@ -5911,8 +5932,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "4xuy1e9r3q",
-      "Integrity": "+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk=",
+      "Fingerprint": "d5qwisneil",
+      "Integrity": "n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -8289,6 +8310,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\test-ajax.html",
+      "SourceId": "randevu_kayit",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\",
+      "BasePath": "_content/randevu_kayit",
+      "RelativePath": "test-ajax#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3tiie4irbd",
+      "Integrity": "t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\test-ajax.html"
     }
   ],
   "Endpoints": [
@@ -18127,13 +18169,13 @@
       ]
     },
     {
-      "Route": "css/site.4xuy1e9r3q.css",
-      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-4xuy1e9r3q.gz",
+      "Route": "css/site.css",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-d5qwisneil.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000248818114"
+          "Quality": "0.000250375563"
         }
       ],
       "ResponseHeaders": [
@@ -18143,19 +18185,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4018"
+          "Value": "3993"
         },
         {
           "Name": "ETag",
-          "Value": "\"p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s=\""
+          "Value": "\"bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 10:41:05 GMT"
+          "Value": "Fri, 06 Jun 2025 21:58:14 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
+          "Value": "no-cache"
         },
         {
           "Name": "Content-Encoding",
@@ -18171,26 +18213,18 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk=\""
+          "Value": "W/\"n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU=\""
         }
       ],
       "EndpointProperties": [
         {
-          "Name": "fingerprint",
-          "Value": "4xuy1e9r3q"
-        },
-        {
-          "Name": "label",
-          "Value": "css/site.css"
-        },
-        {
           "Name": "integrity",
-          "Value": "sha256-+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk="
+          "Value": "sha256-n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU="
         }
       ]
     },
     {
-      "Route": "css/site.4xuy1e9r3q.css",
+      "Route": "css/site.css",
       "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -18200,7 +18234,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "18292"
+          "Value": "18151"
         },
         {
           "Name": "Content-Type",
@@ -18208,11 +18242,156 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk=\""
+          "Value": "\"n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 10:41:05 GMT"
+          "Value": "Fri, 06 Jun 2025 21:58:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.css.gz",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-d5qwisneil.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3993"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 21:58:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.d5qwisneil.css",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-d5qwisneil.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000250375563"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3993"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 21:58:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "d5qwisneil"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.d5qwisneil.css",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "18151"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 21:58:14 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -18222,7 +18401,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "4xuy1e9r3q"
+          "Value": "d5qwisneil"
         },
         {
           "Name": "label",
@@ -18230,13 +18409,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk="
+          "Value": "sha256-n4GZ+TqZQ+G1Qq+dViVnJPeBqXOWVSnjWY9t7LUH3JU="
         }
       ]
     },
     {
-      "Route": "css/site.4xuy1e9r3q.css.gz",
-      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-4xuy1e9r3q.gz",
+      "Route": "css/site.d5qwisneil.css.gz",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-d5qwisneil.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -18245,7 +18424,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4018"
+          "Value": "3993"
         },
         {
           "Name": "Content-Type",
@@ -18253,11 +18432,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s=\""
+          "Value": "\"bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 10:41:05 GMT"
+          "Value": "Fri, 06 Jun 2025 21:58:14 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -18275,7 +18454,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "4xuy1e9r3q"
+          "Value": "d5qwisneil"
         },
         {
           "Name": "label",
@@ -18283,144 +18462,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s="
-        }
-      ]
-    },
-    {
-      "Route": "css/site.css",
-      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-4xuy1e9r3q.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000248818114"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "4018"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 10:41:05 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk="
-        }
-      ]
-    },
-    {
-      "Route": "css/site.css",
-      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\css\\site.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "18292"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 10:41:05 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-+EXl3yP+7t/m5APzmK64m2cnXZy9s0QVcX0h3VIMTbk="
-        }
-      ]
-    },
-    {
-      "Route": "css/site.css.gz",
-      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\2be3xqavjo-4xuy1e9r3q.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "4018"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 10:41:05 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-p09HVExCNKeDqiq9/uWq1f5lzhFvT1WBw1zZZqMBm+s="
+          "Value": "sha256-bq7au8wc56SC1b6knldJ64QPELQLntciVoZ28aLeIUs="
         }
       ]
     },
@@ -54958,6 +55000,304 @@
         {
           "Name": "integrity",
           "Value": "sha256-iGHjS+KLdjPfwHAr0NOwQWwPFJ0BSoQagxV65aHASP8="
+        }
+      ]
+    },
+    {
+      "Route": "test-ajax.3tiie4irbd.html",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\nlayzhvug0-3tiie4irbd.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000803858521"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1243"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 22:37:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3tiie4irbd"
+        },
+        {
+          "Name": "label",
+          "Value": "test-ajax.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg="
+        }
+      ]
+    },
+    {
+      "Route": "test-ajax.3tiie4irbd.html",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\test-ajax.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4214"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 22:37:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3tiie4irbd"
+        },
+        {
+          "Name": "label",
+          "Value": "test-ajax.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg="
+        }
+      ]
+    },
+    {
+      "Route": "test-ajax.3tiie4irbd.html.gz",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\nlayzhvug0-3tiie4irbd.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1243"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 22:37:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3tiie4irbd"
+        },
+        {
+          "Name": "label",
+          "Value": "test-ajax.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4="
+        }
+      ]
+    },
+    {
+      "Route": "test-ajax.html",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\nlayzhvug0-3tiie4irbd.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000803858521"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1243"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 22:37:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg="
+        }
+      ]
+    },
+    {
+      "Route": "test-ajax.html",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\wwwroot\\test-ajax.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4214"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 22:37:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-t20tIhFG285oPkaZGmaTrzgbp73Naw/BJuMEkcHsMcg="
+        }
+      ]
+    },
+    {
+      "Route": "test-ajax.html.gz",
+      "AssetFile": "C:\\Users\\mevlut\\Desktop\\randevu_kayit\\obj\\Debug\\net9.0\\compressed\\nlayzhvug0-3tiie4irbd.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1243"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 06 Jun 2025 22:37:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-xIEoawds+QpB5aIKsbwZ4UeuxTKLBvStg+zFOhKfga4="
         }
       ]
     }
