@@ -26,27 +26,6 @@
                     Güvenilir, hızlı ve hasta odaklı yaklaşımımızla yanınızdayız.
                 </p>
                 
-                <div class="hero-stats row g-3 mb-4 text-center animate-slide-up">
-                    <div class="col-4">
-                        <div class="stat-card">
-                            <h3 class="fw-bold mb-1">50+</h3>
-                            <small class="text-white-50">Uzman Doktor</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="stat-card">
-                            <h3 class="fw-bold mb-1">1000+</h3>
-                            <small class="text-white-50">Hasta Memnuniyeti</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="stat-card">
-                            <h3 class="fw-bold mb-1">24/7</h3>
-                            <small class="text-white-50">Hizmet</small>
-                        </div>
-                    </div>
-                </div>
-                
                 @if (!User.Identity?.IsAuthenticated ?? false)
                 {
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-start animate-bounce-in">
@@ -84,9 +63,8 @@
                                         <small class="text-muted">Kardiyolog</small>
                                     </div>
                                 </div>
-                                <p class="small text-muted mb-3">Bugün 14:30'da randevunuz var</p>
+                                <p class="small text-muted mb-3">Bugün klinikte saat 5 e kadar burada!</p>
                                 <div class="btn-group w-100">
-                                    <button class="btn btn-outline-primary btn-sm">Detaylar</button>
                                     <button class="btn btn-primary btn-sm">Randevu Al</button>
                                 </div>
                             </div>
@@ -121,7 +99,7 @@
                     <div class="feature-stats">
                         <div class="row text-center">
                             <div class="col-6">
-                                <strong class="text-primary d-block">50+</strong>
+                                <strong class="text-primary d-block">10+</strong>
                                 <small class="text-muted">Uzman Doktor</small>
                             </div>
                             <div class="col-6">
@@ -190,7 +168,7 @@
     </section>
 
     <!-- Bölümlerimiz -->
-    <section class="departments-section py-5" data-aos="fade-up">
+        <section class="departments-section py-5" data-aos="fade-up">
         <div class="text-center mb-5">
             <span class="badge bg-primary-soft text-primary px-3 py-2 mb-3">Polikliniklerimiz</span>
             <h2 class="display-5 fw-bold mb-3">Sağlık Hizmetlerimiz</h2>
@@ -239,25 +217,7 @@
                                 <h5 class="card-title fw-bold mb-2">@dept.Name</h5>
                                 <p class="card-text text-muted mb-3 flex-grow-1">@(dept.Description ?? "Uzman doktorlarımızla hizmetinizdeyiz")</p>
                                 
-                                @if (User.Identity?.IsAuthenticated ?? false && !User.IsInRole("Doctor") && !User.IsInRole("Admin"))
-                                {
-                                    <div class="mt-auto">
-                                        <a asp-controller="Randevu" asp-action="Create" 
-                                           asp-route-departmentId="@dept.Id" 
-                                           class="btn btn-primary btn-sm w-100">
-                                            <i class="bi bi-calendar-plus me-1"></i>Randevu Al
-                                        </a>
-                                    </div>
-                                }
-                                else if (!User.Identity?.IsAuthenticated ?? false)
-                                {
-                                    <div class="mt-auto">
-                                        <a asp-controller="Account" asp-action="Login" 
-                                           class="btn btn-outline-primary btn-sm w-100">
-                                            <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
-                                        </a>
-                                    </div>
-                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -344,13 +304,7 @@
                                             <i class="bi bi-calendar-plus me-1"></i>Randevu Al
                                         </a>
                                     }
-                                    else if (!User.Identity?.IsAuthenticated ?? false)
-                                    {
-                                        <a asp-controller="Account" asp-action="Login" 
-                                           class="btn btn-outline-primary btn-sm w-100">
-                                            <i class="bi bi-box-arrow-in-right me-1"></i>Giriş Yapın
-                                        </a>
-                                    }
+                                   
                                 </div>
                             </div>
                         </div>
@@ -498,13 +452,13 @@
                             </div>
                             <div class="col-md-6">
                                 <p class="card-text">
-                                    Değerlerimiz:
+                                    🌟 Değerlerimiz:
                                 </p>
                                 <ul class="list-unstyled mt-3">
-                                    <li class="mb-2"><i class="bi bi-shield-check text-success me-2"></i>Güvenilirlik ve Şeffaflık</li>
-                                    <li class="mb-2"><i class="bi bi-heart text-success me-2"></i>İnsan Odaklı Yaklaşım</li>
-                                    <li class="mb-2"><i class="bi bi-graph-up-arrow text-success me-2"></i>Sürekli Gelişim</li>
-                                    <li class="mb-2"><i class="bi bi-people text-success me-2"></i>Ekip Çalışması</li>
+                                    <li class="mb-2"><i class="bi bi-shield-check text-primary me-2"></i>Güvenilirlik ve Şeffaflık</li>
+                                    <li class="mb-2"><i class="bi bi-heart text-primary me-2"></i>İnsan Odaklı Yaklaşım</li>
+                                    <li class="mb-2"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Sürekli Gelişim</li>
+                                    <li class="mb-2"><i class="bi bi-people text-primary me-2"></i>Ekip Çalışması</li>
                                 </ul>
                             </div>
                         </div>

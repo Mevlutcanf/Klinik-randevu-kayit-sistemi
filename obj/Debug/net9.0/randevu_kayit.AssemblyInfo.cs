@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("randevu_kayit")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+745d4de766f5b4279cbdee9790054edfbf3accfd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6bbf7f9453cc35e285dddc1e4cc367d7702037a")]
 [assembly: System.Reflection.AssemblyProductAttribute("randevu_kayit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("randevu_kayit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
