@@ -80,7 +80,7 @@ dotnet run
 
 5. **Tarayıcıda açın**
 ```
-https://localhost:7000
+https://localhost
 ```
 
 ### İlk Kurulum Verisi
@@ -221,9 +221,9 @@ dotnet test
 
 ## 📞 İletişim
 
-- **Developer**: [Adınız]
-- **Email**: email@example.com
-- **LinkedIn**: [LinkedIn Profiliniz]
+- **Developer**: Mevlüt Fındık
+- **Email**: mevlut201mevlut@gmail.com
+  
 
 ## 📄 Lisans
 
