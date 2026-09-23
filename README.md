@@ -59,7 +59,7 @@ Modern ve kullanıcı dostu hastane randevu yönetim sistemi. ASP.NET Core ile g
 
 1. **Projeyi klonlayın**
 ```bash
-git clone https://github.com/kullaniciadi/randevu-kayit.git
+git clone https://github.com/mevlutcanf/randevu-kayit.git
 cd randevu-kayit
 ```
 
